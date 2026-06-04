@@ -48,7 +48,7 @@ export default function PublicProductPage({ params }: { params: { sku: string } 
         </div>
 
         <div className="p-5">
-          <ProductImageStrip images={product.imageUrls} fallback="/images/qr-product-page-preview.svg" />
+          <ProductImageStrip images={product.imageUrls} fallback="/images/qr-product-page-preview.svg" product={product} />
 
           <InfoBlock title="材质 Materials">{product.materials || "Materials to be confirmed."}</InfoBlock>
           <InfoBlock title="用途 Intended Use">{product.intendedUse || "Intended use to be confirmed."}</InfoBlock>

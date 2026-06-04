@@ -19,8 +19,9 @@ backup/old-liucaiku-2026-06-03/
 - Product categories have been expanded with Chinese labels, hints and initial-letter search.
 - `/pricing` and `/contact` have been added for commercial validation and lead capture.
 - Free self-service usage is limited to 3 SKU drafts before the pricing path is shown.
-- WeChat Pay and Alipay collection images are presented as folded payment cards on `/pricing`.
-- Email OTP login, `/account`, and `/admin` have been added for manual subscription activation by customer email.
+- Pricing now routes paid plans to `/checkout`, where WeChat Pay and Alipay QR codes are shown directly.
+- Email numeric-code registration/login, password login, `/account`, and `/admin` support manual subscription activation by customer email.
+- Product image handling supports uploaded local images, image URLs, and an auto-generated SKU visual fallback.
 - Old public routes redirect to the new product workflow:
   - `/talents` and `/companies` -> `/dashboard`
   - `/student-submit` and `/company-submit` -> `/create`
@@ -41,8 +42,9 @@ backup/old-liucaiku-2026-06-03/
 - `/product/[sku]` public product information page for QR use
 - `/print/[sku]` printable / Save as PDF page
 - `/pricing` pricing and service packages
+- `/checkout` QR payment confirmation page
 - `/contact` lead capture and consultation form
-- `/login` email OTP / magic-link login
+- `/login` email numeric-code registration/login and password login
 - `/account` customer subscription and quota view
 - `/admin` admin subscription management
 
@@ -71,6 +73,7 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 │   ├── layout.tsx
 │   ├── globals.css
 │   ├── pricing/page.tsx
+│   ├── checkout/page.tsx
 │   ├── contact/page.tsx
 │   ├── login/page.tsx
 │   ├── account/page.tsx
@@ -90,6 +93,7 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 ├── lib
 │   ├── generatePack.ts
 │   ├── productStorage.ts
+│   ├── productVisual.ts
 │   ├── subscriptionPlans.ts
 │   ├── supabaseAdmin.ts
 │   ├── supabaseClient.ts
@@ -144,8 +148,8 @@ npm run lint
 - Starter: ¥39 / 20 SKU.
 - Growth: ¥359 / 50 SKU.
 - Bulk: ¥999 / 100 SKU.
-- Payment collection is currently QR-based with manual confirmation through the contact form.
-- Admin flow: customer logs in with email, pays by QR code, submits contact/payment note, then admin opens `/admin` and assigns a plan/quota.
+- Payment collection is currently QR-based with direct QR display on `/checkout` and manual confirmation through the contact form.
+- Admin flow: customer registers/logs in with email, pays by QR code, submits contact/payment note, then admin opens `/admin` and assigns a plan/quota.
 - If the customer has not logged in yet, the admin can enter the customer email in `/admin` and create/open the paid quota manually.
 
 ## Login and Admin Setup
@@ -178,9 +182,10 @@ https://liucaiku.com
 https://liucaiku.com/account
 ```
 
-5. Use the admin email in `ADMIN_EMAILS` to log in at `/login`, then open `/admin`.
+5. In Supabase Auth email templates, make sure the email clearly shows the numeric token, for example: `Your login code is {{ .Token }}`. Users should not need to click the email link.
+6. Use the admin email in `ADMIN_EMAILS` to log in at `/login`, then open `/admin`.
 
-Phone, WeChat and QQ login are not enabled in this version because they require SMS providers or platform app credentials. Email OTP is the first supported login method.
+Phone, WeChat and QQ login are not enabled in this version because they require SMS providers or platform app credentials. Email numeric code and password login are the first supported login methods.
 
 ## Deployment and Domain
 

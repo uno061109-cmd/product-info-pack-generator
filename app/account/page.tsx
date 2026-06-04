@@ -139,7 +139,10 @@ export default function AccountPage() {
           <Link href="/create" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
             创建 SKU
           </Link>
-          <Link href="/pricing" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
+          <Link href="/checkout?plan=Growth" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
+            升级并扫码付款
+          </Link>
+          <Link href="/pricing" className="rounded-lg border border-line bg-mist px-5 py-3 text-center font-semibold text-ink">
             查看套餐
           </Link>
         </div>

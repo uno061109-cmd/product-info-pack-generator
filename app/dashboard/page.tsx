@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { ProductImageStrip } from "@/components/ProductImageStrip";
 import { analyzeMissingInfo } from "@/lib/generatePack";
 import { getProducts } from "@/lib/productStorage";
-import { categoryLetters, categoryMetadata, ProductInput } from "@/lib/productTypes";
+import { categoryLetters, categoryMetadata } from "@/lib/productTypes";
+import type { ProductInput } from "@/lib/productTypes";
 
 export default function DashboardPage() {
   const [products, setProducts] = useState<ProductInput[]>([]);
@@ -166,11 +168,16 @@ function SkuCard({ product }: { product: ProductInput }) {
   return (
     <article className="rounded-lg border border-line bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-ink">{product.productName || "Untitled Product"}</h2>
-          <p className="mt-2 text-sm text-slate-500">
-            {product.sku} · {meta?.zh || product.category} · {product.targetMarket}
-          </p>
+        <div className="flex gap-4">
+          <div className="w-28 shrink-0 overflow-hidden rounded-lg">
+            <ProductImageStrip images={product.imageUrls.slice(0, 1)} product={product} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold text-ink">{product.productName || "Untitled Product"}</h2>
+            <p className="mt-2 text-sm text-slate-500">
+              {product.sku} · {meta?.zh || product.category} · {product.targetMarket}
+            </p>
+          </div>
         </div>
         <span
           className={`w-fit rounded-full px-3 py-1 text-sm font-semibold ${

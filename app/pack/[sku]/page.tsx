@@ -194,7 +194,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
           <MissingInfoPanel product={product} />
           <section className="rounded-lg border border-line bg-white p-5 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">产品图片 Product Images</p>
-            <ProductImageStrip images={product.imageUrls} className="mt-4" />
+            <ProductImageStrip images={product.imageUrls} product={product} className="mt-4" />
           </section>
         </aside>
       </div>

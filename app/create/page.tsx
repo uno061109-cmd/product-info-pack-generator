@@ -92,6 +92,17 @@ export default function CreateProductPage() {
     setSavedMessage("");
   }
 
+  async function handleImageFiles(files: FileList | null) {
+    if (!files?.length) {
+      return;
+    }
+
+    const selectedFiles = Array.from(files).filter((file) => file.type.startsWith("image/")).slice(0, 4);
+    const dataUrls = await Promise.all(selectedFiles.map((file) => compressImageFile(file)));
+
+    updateField("imageUrls", [...product.imageUrls, ...dataUrls].slice(0, 6));
+  }
+
   function save(destination: "dashboard" | "pack") {
     const isExistingSku = getProducts().some((item) => normalizeSku(item.sku) === normalizeSku(product.sku));
 
@@ -155,11 +166,11 @@ export default function CreateProductPage() {
             </div>
           </div>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Link href="/pricing" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
-              查看套餐并付款
+            <Link href="/checkout?plan=Growth" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
+              确认订阅并扫码付款
             </Link>
-            <Link href="/contact?plan=额度开通咨询" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
-              联系确认开通
+            <Link href="/pricing" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
+              查看全部套餐
             </Link>
           </div>
         </section>
@@ -289,7 +300,16 @@ export default function CreateProductPage() {
           </FormSection>
 
           <FormSection title="图片 Images">
-            <Field label="产品图片链接 Product Image URLs" hint="每行一个链接。暂时没有图片链接时，将使用占位图展示。">
+            <Field label="上传真实产品图 Upload Product Images" hint="可上传 1-4 张本地图片。图片会保存在当前浏览器，用于资料包和公开产品页预览。">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(event) => handleImageFiles(event.currentTarget.files)}
+                className="input"
+              />
+            </Field>
+            <Field label="产品图片链接 Product Image URLs" hint="每行一个链接。没有真实图片时，系统会根据商品资料自动生成 SKU 预览图。">
               <TextArea
                 value={product.imageUrls.join("\n")}
                 onChange={(event) =>
@@ -304,6 +324,15 @@ export default function CreateProductPage() {
                 placeholder={"https://example.com/product-front.jpg\nhttps://example.com/product-packaging.jpg"}
               />
             </Field>
+            {product.imageUrls.length > 0 && (
+              <button
+                type="button"
+                onClick={() => updateField("imageUrls", [])}
+                className="rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-mist"
+              >
+                清空图片
+              </button>
+            )}
           </FormSection>
         </div>
 
@@ -311,7 +340,10 @@ export default function CreateProductPage() {
           <MissingInfoPanel product={product} />
           <section className="rounded-lg border border-line bg-white p-5 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">图片预览 Image Preview</p>
-            <ProductImageStrip images={product.imageUrls} className="mt-4" />
+            <ProductImageStrip images={product.imageUrls} product={product} className="mt-4" />
+            <p className="mt-3 text-xs leading-5 text-slate-500">
+              没有真实产品图时，这里会自动生成 SKU 预览图；真实产品图请以上传或图片链接为准。
+            </p>
           </section>
           <section className="rounded-lg border border-line bg-white p-5 shadow-sm">
             <div className="grid gap-3">
@@ -349,6 +381,42 @@ export default function CreateProductPage() {
       </div>
     </div>
   );
+}
+
+function compressImageFile(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file);
+    const image = new Image();
+
+    image.onload = () => {
+      const maxWidth = 1200;
+      const maxHeight = 900;
+      const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
+      const width = Math.max(1, Math.round(image.width * scale));
+      const height = Math.max(1, Math.round(image.height * scale));
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      URL.revokeObjectURL(objectUrl);
+
+      if (!context) {
+        reject(new Error("Image compression is unavailable."));
+        return;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      context.drawImage(image, 0, 0, width, height);
+      resolve(canvas.toDataURL("image/jpeg", 0.82));
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Unable to read image."));
+    };
+
+    image.src = objectUrl;
+  });
 }
 
 function FormSection({ title, children }: { title: string; children: ReactNode }) {
