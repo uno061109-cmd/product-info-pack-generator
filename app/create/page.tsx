@@ -17,6 +17,8 @@ import {
   normalizeSku,
   upsertProduct
 } from "@/lib/productStorage";
+import { subscriptionPlans } from "@/lib/subscriptionPlans";
+import { supabase } from "@/lib/supabaseClient";
 import {
   ageRestrictions,
   binaryAnswers,
@@ -34,25 +36,55 @@ export default function CreateProductPage() {
   const [savedMessage, setSavedMessage] = useState("");
   const [shareUrl, setShareUrl] = useState("");
   const [quotaUsage, setQuotaUsage] = useState(0);
+  const [quotaLimit, setQuotaLimit] = useState(FREE_SKU_LIMIT);
+  const [accountEmail, setAccountEmail] = useState("");
+  const [accountPlan, setAccountPlan] = useState("Free");
   const [quotaExceeded, setQuotaExceeded] = useState(false);
 
   useEffect(() => {
-    const skuParam = new URLSearchParams(window.location.search).get("sku");
-    const usage = getFreeQuotaUsage();
-    setQuotaUsage(usage);
+    async function loadForm() {
+      const skuParam = new URLSearchParams(window.location.search).get("sku");
+      const usage = getFreeQuotaUsage();
+      let nextLimit = FREE_SKU_LIMIT;
 
-    if (skuParam) {
-      const existing = getProductBySku(skuParam);
-      if (existing) {
-        setProduct(existing);
-      } else if (usage >= FREE_SKU_LIMIT) {
+      if (supabase) {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const user = sessionData.session?.user;
+
+        if (user) {
+          setAccountEmail(user.email || "");
+
+          const { data } = await supabase
+            .from("subscriptions")
+            .select("plan,sku_limit,status")
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+          if (data && data.status !== "paused") {
+            nextLimit = Number(data.sku_limit || subscriptionPlans.Free.skuLimit);
+            setAccountPlan(String(data.plan || "Free"));
+          }
+        }
+      }
+
+      setQuotaUsage(usage);
+      setQuotaLimit(nextLimit);
+
+      if (skuParam) {
+        const existing = getProductBySku(skuParam);
+        if (existing) {
+          setProduct(existing);
+        } else if (usage >= nextLimit) {
+          setQuotaExceeded(true);
+        }
+      } else if (usage >= nextLimit) {
         setQuotaExceeded(true);
       }
-    } else if (usage >= FREE_SKU_LIMIT) {
-      setQuotaExceeded(true);
+
+      setLoaded(true);
     }
 
-    setLoaded(true);
+    loadForm();
   }, []);
 
   function updateField<K extends keyof ProductInput>(key: K, value: ProductInput[K]) {
@@ -63,7 +95,7 @@ export default function CreateProductPage() {
   function save(destination: "dashboard" | "pack") {
     const isExistingSku = getProducts().some((item) => normalizeSku(item.sku) === normalizeSku(product.sku));
 
-    if (quotaExceeded || (!isExistingSku && getFreeQuotaUsage() >= FREE_SKU_LIMIT)) {
+    if (quotaExceeded || (!isExistingSku && getFreeQuotaUsage() >= quotaLimit)) {
       setQuotaExceeded(true);
       return;
     }
@@ -104,9 +136,9 @@ export default function CreateProductPage() {
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
         <section className="rounded-lg border border-line bg-white p-8 shadow-sm">
           <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">免费额度已用完 Free quota used</p>
-          <h1 className="mt-3 text-4xl font-bold text-ink">你已经体验了 {FREE_SKU_LIMIT} 个免费 SKU。</h1>
+          <h1 className="mt-3 text-4xl font-bold text-ink">当前 SKU 额度已用完。</h1>
           <p className="mt-4 max-w-2xl leading-7 text-slate-600">
-            免费版支持自助创建 {FREE_SKU_LIMIT} 个 SKU 资料包。继续创建更多 Product Info Pack，请选择套餐并完成付款确认。
+            当前账号可创建 {quotaLimit} 个 SKU 资料包，已使用 {quotaUsage} 个。继续创建更多 Product Info Pack，请选择套餐并完成付款确认。
           </p>
           <div className="mt-6 grid gap-3 rounded-lg border border-line bg-mist p-4 text-sm text-slate-700 sm:grid-cols-3">
             <div>
@@ -145,7 +177,7 @@ export default function CreateProductPage() {
             录入一个 SKU 的基础资料，整理成英文 Listing、包装说明、QR 产品页和可打印 Product Info Pack。
           </p>
           <p className="mt-2 text-sm text-slate-500">
-            免费自助体验：已使用 {quotaUsage} / {FREE_SKU_LIMIT} 个 SKU。
+            当前额度：已使用 {quotaUsage} / {quotaLimit} 个 SKU{accountEmail ? ` · ${accountPlan} · ${accountEmail}` : " · 未登录按免费额度计算"}。
           </p>
         </div>
         <Link href="/dashboard" className="rounded-lg border border-line bg-white px-4 py-2.5 text-center font-semibold text-ink transition hover:bg-mist">

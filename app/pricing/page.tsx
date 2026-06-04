@@ -41,6 +41,7 @@ const servicePlans = [
 ];
 
 const paymentNotes = [
+  "建议先用邮箱验证码登录，方便付款后为同一个账号开通 SKU 额度。",
   "提交需求后，我们会在 24 小时内联系你确认品类、SKU 数量和资料范围。",
   "选择套餐后可扫码付款；付款时建议备注微信号、套餐名和 SKU 数量。",
   "付款后请提交咨询表单，便于我们确认开通和交付安排。"
@@ -148,9 +149,14 @@ export default function PricingPage() {
               收款码默认收起，避免页面显得突兀。付款后请在咨询表单里填写联系方式、套餐和付款备注，我们会确认后联系你。
             </p>
           </div>
-          <Link href="/contact?plan=额度开通咨询&payment=paid" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
-            已付款，提交信息
-          </Link>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link href="/login" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
+              先登录账号
+            </Link>
+            <Link href="/contact?plan=额度开通咨询&payment=paid" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
+              已付款，提交信息
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
@@ -182,11 +188,12 @@ export default function PricingPage() {
       <section className="mt-10 rounded-lg border border-line bg-mist p-6">
         <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">开通方式 Activation</p>
         <h2 className="mt-2 text-2xl font-bold text-ink">免费 3 个 SKU，超过后选择套餐。</h2>
-        <div className="mt-5 grid gap-4 lg:grid-cols-3">
+        <div className="mt-5 grid gap-4 lg:grid-cols-4">
           {[
-            ["01", "免费体验", "先在 Create 页面自助生成 3 个 SKU，确认资料包格式是否适合你的店铺。"],
-            ["02", "扫码付款", "选择 Starter、Growth 或 Bulk 套餐，用微信或支付宝付款，并备注联系方式。"],
-            ["03", "确认开通", "提交咨询表单后，我们人工确认付款和需求，再安排套餐开通或资料交付。"]
+            ["01", "邮箱登录", "先用邮箱验证码登录，付款确认后会开通到这个邮箱账号。"],
+            ["02", "免费体验", "在 Create 页面自助生成 3 个 SKU，确认资料包格式是否适合你的店铺。"],
+            ["03", "扫码付款", "选择 Starter、Growth 或 Bulk 套餐，用微信或支付宝付款，并备注联系方式。"],
+            ["04", "确认开通", "提交咨询表单后，我们人工确认付款和需求，再为你的账号开通 SKU 额度。"]
           ].map(([number, title, body]) => (
             <div key={title} className="rounded-lg border border-line bg-white p-5">
               <span className="text-sm font-semibold text-slate-500">{number}</span>

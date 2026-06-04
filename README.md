@@ -20,6 +20,7 @@ backup/old-liucaiku-2026-06-03/
 - `/pricing` and `/contact` have been added for commercial validation and lead capture.
 - Free self-service usage is limited to 3 SKU drafts before the pricing path is shown.
 - WeChat Pay and Alipay collection images are presented as folded payment cards on `/pricing`.
+- Email OTP login, `/account`, and `/admin` have been added for manual subscription activation by customer email.
 - Old public routes redirect to the new product workflow:
   - `/talents` and `/companies` -> `/dashboard`
   - `/student-submit` and `/company-submit` -> `/create`
@@ -41,6 +42,9 @@ backup/old-liucaiku-2026-06-03/
 - `/print/[sku]` printable / Save as PDF page
 - `/pricing` pricing and service packages
 - `/contact` lead capture and consultation form
+- `/login` email OTP / magic-link login
+- `/account` customer subscription and quota view
+- `/admin` admin subscription management
 
 ## Tech Stack
 
@@ -68,7 +72,11 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 │   ├── globals.css
 │   ├── pricing/page.tsx
 │   ├── contact/page.tsx
+│   ├── login/page.tsx
+│   ├── account/page.tsx
+│   ├── admin/page.tsx
 │   ├── api/leads/route.ts
+│   ├── api/admin/users/route.ts
 │   ├── about/page.tsx
 │   ├── companies/page.tsx
 │   ├── company-submit/page.tsx
@@ -82,6 +90,9 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 ├── lib
 │   ├── generatePack.ts
 │   ├── productStorage.ts
+│   ├── subscriptionPlans.ts
+│   ├── supabaseAdmin.ts
+│   ├── supabaseClient.ts
 │   └── productTypes.ts
 ├── public
 │   ├── assets
@@ -96,6 +107,7 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 │           ├── alipay-pay.jpg
 │           └── wechat-pay.jpg
 ├── scripts/deploy-vercel.js
+├── supabase/schema.sql
 ├── preview-server.js
 ├── next.config.mjs
 ├── package.json
@@ -132,6 +144,40 @@ npm run lint
 - Growth: ¥359 / 50 SKU.
 - Bulk: ¥999 / 100 SKU.
 - Payment collection is currently QR-based with manual confirmation through the contact form.
+- Admin flow: customer logs in with email, pays by QR code, submits contact/payment note, then admin opens `/admin` and assigns a plan/quota.
+- If the customer has not logged in yet, the admin can enter the customer email in `/admin` and create/open the paid quota manually.
+
+## Login and Admin Setup
+
+This project uses Supabase for the first version of login and manual subscription activation.
+
+1. Create a Supabase project.
+2. Open the Supabase SQL editor and run:
+
+```text
+supabase/schema.sql
+```
+
+3. In Vercel, add these environment variables:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+ADMIN_EMAILS=your-admin-email@example.com
+LEAD_DESTINATION_URL=optional_lead_destination_url
+```
+
+4. In Supabase Auth settings, allow the site URL and redirect URL:
+
+```text
+https://liucaiku.com
+https://liucaiku.com/account
+```
+
+5. Use the admin email in `ADMIN_EMAILS` to log in at `/login`, then open `/admin`.
+
+Phone, WeChat and QQ login are not enabled in this version because they require SMS providers or platform app credentials. Email OTP is the first supported login method.
 
 ## Deployment and Domain
 
