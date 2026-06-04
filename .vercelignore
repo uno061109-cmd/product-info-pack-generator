@@ -1,0 +1,6 @@
+backup/
+public/assets/
+outputs/
+work/
+.DS_Store
+*.log
