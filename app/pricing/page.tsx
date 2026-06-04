@@ -1,49 +1,91 @@
 import Link from "next/link";
 
-const plans = [
+const servicePlans = [
   {
-    name: "免费试用",
+    name: "免费试做",
     price: "¥0",
-    line: "适合体验一个 SKU 的完整流程",
-    features: ["3 个 SKU 本地资料包", "英文 listing 模板", "可打印 PDF", "公开分享链接演示"]
+    title: "1 个 SKU 示例资料包",
+    fit: "第一次了解效果的小卖家",
+    cta: "免费试做 1 个 SKU",
+    planQuery: "免费试做 1 个 SKU",
+    features: ["英文 Listing 示例", "产品信息卡", "包装说明", "Missing Info List", "PDF 示例"]
   },
   {
-    name: "基础版",
-    price: "¥39/月",
-    line: "适合小卖家日常整理商品资料",
-    features: ["30 个 SKU", "更多品类模板", "QR 产品页托管待接入", "缺失信息检查"]
+    name: "Starter",
+    price: "¥39",
+    title: "20 个 SKU 资料整理",
+    fit: "饰品、配件、小家居上新测试",
+    cta: "咨询 20 个 SKU",
+    planQuery: "Starter 20 个 SKU",
+    features: ["20 个 SKU 英文资料包", "英文 Listing", "产品信息卡", "包装说明", "Basic Risk Checklist", "可打印 PDF"]
   },
   {
-    name: "专业版",
-    price: "¥99/月",
-    line: "适合 SKU 多、需要批量整理的团队",
-    features: ["200 个 SKU", "批量导入规划", "团队资料库规划", "优先接入 AI 生成"]
+    name: "Growth",
+    price: "¥299",
+    title: "50 个 SKU 资料整理",
+    fit: "店铺一批商品标准化",
+    cta: "咨询 50 个 SKU",
+    planQuery: "Growth 50 个 SKU",
+    popular: true,
+    features: ["50 个 SKU 英文资料包", "批量字段检查", "统一英文风格", "QR 产品页", "PDF 资料包", "缺失信息清单"]
+  },
+  {
+    name: "Bulk",
+    price: "¥999",
+    title: "100 个 SKU 资料整理",
+    fit: "小团队集中建立商品资料库",
+    cta: "咨询 100 个 SKU",
+    planQuery: "Bulk 100 个 SKU",
+    features: ["100 个 SKU 英文资料包", "批量 SKU 信息标准化", "统一包装说明格式", "QR 产品页", "PDF 资料包", "批量 Missing Info List"]
   }
 ];
 
-const services = [
-  ["¥299", "20 个 SKU 资料整理", "适合先试一批饰品、配件或家居 SKU。"],
-  ["¥699", "50 个 SKU 资料整理", "适合店铺上新或旧品资料标准化。"],
-  ["¥1299", "100 个 SKU 资料整理", "适合需要集中建立商品资料库的小团队。"]
+const paymentNotes = [
+  "提交需求后，我们会在 24 小时内联系你确认品类、SKU 数量和资料范围。",
+  "确认后可通过微信或支付宝付款；付款方式会在沟通中发送。",
+  "免费试做适合先看交付格式，不承诺覆盖复杂法规判断。"
 ];
 
 export default function PricingPage() {
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <section className="mb-10 max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">商业方案 Pricing</p>
-        <h1 className="mt-2 text-4xl font-bold text-ink">先用工具跑通，再用代整理服务变现。</h1>
-        <p className="mt-4 leading-7 text-slate-600">
-          留材库 Product Pack 第一阶段建议用“免费试用 + 代整理服务 + 订阅意向”验证需求，后续再接数据库、支付和 AI API。
-        </p>
+      <section className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">整理套餐 Pricing</p>
+          <h1 className="mt-2 text-4xl font-bold leading-tight text-ink">先试做 1 个 SKU，满意后再批量整理</h1>
+          <p className="mt-4 leading-7 text-slate-600">
+            你只需要提供商品资料，我们帮你整理成英文上架资料包、产品信息卡、包装说明、QR 产品页和可打印 PDF。
+          </p>
+        </div>
+        <div className="rounded-lg border border-line bg-white p-5 shadow-sm">
+          <p className="font-semibold text-ink">每个 SKU 资料包包含</p>
+          <div className="mt-3 grid gap-2 text-sm text-slate-700 sm:grid-cols-2">
+            {["英文 Listing", "产品信息卡", "包装说明", "安全提醒", "QR 产品信息页", "可打印 PDF", "Missing Information List", "Basic Risk Checklist"].map((item) => (
+              <span key={item} className="rounded-md bg-mist px-3 py-2">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="grid gap-5 lg:grid-cols-3">
-        {plans.map((plan) => (
-          <article key={plan.name} className="rounded-lg border border-line bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-semibold text-ink">{plan.name}</h2>
-            <p className="mt-3 text-3xl font-bold text-ink">{plan.price}</p>
-            <p className="mt-3 leading-7 text-slate-600">{plan.line}</p>
+      <section className="grid gap-5 lg:grid-cols-4">
+        {servicePlans.map((plan) => (
+          <article
+            key={plan.name}
+            className={`relative rounded-lg border bg-white p-6 shadow-sm ${
+              plan.popular ? "border-ink shadow-soft" : "border-line"
+            }`}
+          >
+            {plan.popular && (
+              <span className="absolute right-4 top-4 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-white">
+                Most Popular
+              </span>
+            )}
+            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">{plan.name}</p>
+            <p className="mt-4 text-4xl font-bold text-ink">{plan.price}</p>
+            <h2 className="mt-3 text-2xl font-semibold text-ink">{plan.title}</h2>
+            <p className="mt-3 leading-7 text-slate-600">适合：{plan.fit}</p>
             <ul className="mt-5 space-y-2 text-sm text-slate-700">
               {plan.features.map((feature) => (
                 <li key={feature} className="rounded-md bg-mist px-3 py-2">
@@ -51,31 +93,49 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            <Link href={`/contact?plan=${encodeURIComponent(plan.name)}`} className="mt-6 inline-flex rounded-lg bg-ink px-5 py-3 font-semibold text-white">
-              预约开通
+            <Link
+              href={`/contact?plan=${encodeURIComponent(plan.planQuery)}`}
+              className={`mt-6 inline-flex w-full justify-center rounded-lg px-5 py-3 font-semibold ${
+                plan.popular ? "bg-ink text-white" : "border border-line bg-white text-ink hover:bg-mist"
+              }`}
+            >
+              {plan.cta}
             </Link>
           </article>
         ))}
       </section>
 
-      <section className="mt-12 rounded-lg border border-line bg-white p-6 shadow-sm">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <section className="mt-10 rounded-lg border border-line bg-white p-6 shadow-sm">
+        <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">最快变现方式</p>
-            <h2 className="mt-2 text-3xl font-bold text-ink">代整理 SKU 资料包服务</h2>
+            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">付款与沟通 Payment</p>
+            <h2 className="mt-2 text-3xl font-bold text-ink">先确认需求，再开始整理。</h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              为了避免你买错套餐，我们会先确认 SKU 数量、商品品类、资料完整度和交付格式。
+            </p>
           </div>
-          <Link href="/contact?plan=SKU资料代整理" className="rounded-lg border border-line px-5 py-3 font-semibold text-ink transition hover:bg-mist">
-            咨询代整理
-          </Link>
+          <ul className="grid gap-3 text-slate-700">
+            {paymentNotes.map((item) => (
+              <li key={item} className="rounded-md bg-mist px-4 py-3">
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="mt-6 grid gap-4 lg:grid-cols-3">
-          {services.map(([price, title, body]) => (
-            <div key={title} className="rounded-lg border border-line bg-mist p-5">
-              <p className="text-2xl font-bold text-ink">{price}</p>
-              <h3 className="mt-2 text-xl font-semibold text-ink">{title}</h3>
-              <p className="mt-2 leading-7 text-slate-600">{body}</p>
-            </div>
-          ))}
+      </section>
+
+      <section className="mt-10 rounded-lg border border-line bg-mist p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">工具版 Tool Edition</p>
+            <h2 className="mt-2 text-2xl font-bold text-ink">工具版即将开放</h2>
+            <p className="mt-2 max-w-3xl leading-7 text-slate-600">
+              如果你希望长期自己管理 SKU，可以预约工具版体验名额。当前阶段我们优先提供代整理交付服务。
+            </p>
+          </div>
+          <Link href="/contact?plan=预约工具版" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
+            预约工具版
+          </Link>
         </div>
       </section>
     </main>

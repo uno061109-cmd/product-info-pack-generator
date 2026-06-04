@@ -2,19 +2,19 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const lead = await request.json();
-  const webhookUrl = process.env.LEAD_WEBHOOK_URL;
+  const leadDestinationUrl = process.env.LEAD_DESTINATION_URL;
 
-  if (!webhookUrl) {
+  if (!leadDestinationUrl) {
     return NextResponse.json(
       {
         ok: false,
-        message: "LEAD_WEBHOOK_URL is not configured. Store lead locally or configure a webhook for production."
+        message: "Lead delivery destination is not configured."
       },
       { status: 501 }
     );
   }
 
-  const response = await fetch(webhookUrl, {
+  const response = await fetch(leadDestinationUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   });
 
   if (!response.ok) {
-    return NextResponse.json({ ok: false, message: "Webhook delivery failed." }, { status: 502 });
+    return NextResponse.json({ ok: false, message: "Lead delivery failed." }, { status: 502 });
   }
 
   return NextResponse.json({ ok: true });

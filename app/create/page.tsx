@@ -47,7 +47,7 @@ export default function CreateProductPage() {
     const saved = upsertProduct(product);
     setProduct(saved);
     setShareUrl(getShareableProductUrl(saved));
-    setSavedMessage("已保存到当前浏览器。Saved to this browser.");
+    setSavedMessage("已保存。你可以继续补充资料，或查看完整 Product Info Pack。");
 
     if (destination === "pack") {
       router.push(getShareableProductPath(saved, "pack"));
@@ -58,7 +58,18 @@ export default function CreateProductPage() {
   if (!loaded) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="rounded-lg border border-line bg-white p-8 text-slate-600 shadow-sm">Loading product form...</div>
+        <div className="rounded-lg border border-line bg-white p-6 shadow-sm">
+          <div className="h-7 w-56 rounded bg-slate-100" />
+          <div className="mt-4 h-4 w-full max-w-xl rounded bg-slate-100" />
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className="rounded-lg border border-line bg-mist p-4">
+                <div className="h-4 w-28 rounded bg-slate-200" />
+                <div className="mt-3 h-10 rounded bg-white" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -70,7 +81,7 @@ export default function CreateProductPage() {
           <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">创建 / 编辑 Create / Edit</p>
           <h1 className="mt-2 text-4xl font-bold text-ink">创建产品资料包</h1>
           <p className="mt-3 max-w-2xl leading-7 text-slate-600">
-            录入一个 SKU 的基础资料，系统会检查缺失字段，并生成英文 listing、包装文案、QR 产品页和可打印资料包。
+            录入一个 SKU 的基础资料，整理成英文 Listing、包装说明、QR 产品页和可打印 Product Info Pack。
           </p>
         </div>
         <Link href="/dashboard" className="rounded-lg border border-line bg-white px-4 py-2.5 text-center font-semibold text-ink transition hover:bg-mist">
@@ -182,7 +193,7 @@ export default function CreateProductPage() {
           </FormSection>
 
           <FormSection title="图片 Images">
-            <Field label="产品图片链接 Product Image URLs" hint="每行一个链接。留空则使用本地占位图。">
+            <Field label="产品图片链接 Product Image URLs" hint="每行一个链接。暂时没有图片链接时，将使用占位图展示。">
               <TextArea
                 value={product.imageUrls.join("\n")}
                 onChange={(event) =>

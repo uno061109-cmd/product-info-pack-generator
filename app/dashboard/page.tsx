@@ -52,14 +52,14 @@ export default function DashboardPage() {
           <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">控制台 Dashboard</p>
           <h1 className="mt-2 text-4xl font-bold text-ink">留材库 Product Pack</h1>
           <p className="mt-3 max-w-2xl leading-7 text-slate-600">
-            管理 SKU 记录、资料完整度、公开产品页和可打印产品资料包。
+            管理试做和已整理的 SKU 资料包，查看资料完整度、公开产品页和可打印 PDF。
           </p>
         </div>
         <Link
           href="/create"
           className="focus-ring rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-slate-800"
         >
-          创建新的产品资料包
+          创建第一个 SKU
         </Link>
       </div>
 
@@ -125,15 +125,15 @@ export default function DashboardPage() {
             alt="Empty dashboard preview"
             className="mx-auto mb-8 w-full max-w-xl rounded-lg border border-line bg-mist"
           />
-          <h2 className="text-2xl font-semibold text-ink">还没有 SKU 资料包</h2>
+          <h2 className="text-2xl font-semibold text-ink">还没有创建商品资料包</h2>
           <p className="mx-auto mt-3 max-w-xl leading-7 text-slate-600">
-            先从一个商品开始。第一版会把 SKU 数据保存在当前浏览器 localStorage 中。
+            先创建一个 SKU，体验完整 Product Info Pack 流程。
           </p>
           <Link
             href="/create"
             className="focus-ring mt-7 inline-flex rounded-lg bg-ink px-5 py-3 font-semibold text-white shadow-soft transition hover:bg-slate-800"
           >
-            创建新的产品资料包
+            创建第一个 SKU
           </Link>
         </section>
       ) : (
@@ -143,8 +143,8 @@ export default function DashboardPage() {
           ))}
           {filteredProducts.length === 0 && (
             <div className="rounded-lg border border-line bg-white p-8 text-center shadow-sm lg:col-span-2">
-              <h2 className="text-2xl font-semibold text-ink">没有匹配的 SKU</h2>
-              <p className="mt-3 text-slate-600">换一个关键词、类目首字母或状态试试。</p>
+              <h2 className="text-2xl font-semibold text-ink">没有符合条件的商品资料包</h2>
+              <p className="mt-3 text-slate-600">换一个关键词、类目首字母或状态筛选试试。</p>
             </div>
           )}
         </section>

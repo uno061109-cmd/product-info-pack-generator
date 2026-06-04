@@ -134,7 +134,7 @@ export default function PrintPackPage({ params }: { params: { sku: string } }) {
         </PrintSection>
 
         <PrintSection title="免责声明 Disclaimer">
-          <p className="mb-3 leading-7 text-slate-700">本工具仅用于商品资料整理和上架准备，不构成法律建议、合规认证或官方 Digital Product Passport 认证。</p>
+          <p className="mb-3 leading-7 text-slate-700">本服务仅用于商品资料整理和上架准备，不构成法律建议、合规认证或官方 Digital Product Passport 认证。</p>
           <p className="leading-7 text-slate-700">{productPackDisclaimer}</p>
         </PrintSection>
       </article>

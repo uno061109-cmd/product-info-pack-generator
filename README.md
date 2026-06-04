@@ -1,6 +1,6 @@
 # 留材库 Product Pack
 
-留材库 Product Pack 是一个面向中国跨境电商卖家的轻量 B2B SaaS 工具。它把 SKU 信息整理成英文 listing、产品信息卡、包装标签文案、QR 产品页、缺失信息检查、基础风险清单和可打印产品资料包。
+留材库 Product Pack 是一个面向中国跨境电商卖家的 SKU 资料包代整理服务。卖家提供零散商品资料，我们整理成交付给上架、包装说明、客户展示和内部归档使用的英文 Product Info Pack。
 
 The site is now Chinese-first with English terminology kept for cross-border documentation workflows.
 
@@ -22,10 +22,9 @@ backup/old-liucaiku-2026-06-03/
   - `/talents` and `/companies` -> `/dashboard`
   - `/student-submit` and `/company-submit` -> `/create`
   - `/about` -> `/`
-- The first version does not require a real AI API, OpenAI key, login or payment.
-- SKU records are saved in browser localStorage.
-- Shareable product links can carry encoded SKU data in the URL for demo and client review.
-- Lead capture can send to `LEAD_WEBHOOK_URL`; without it, leads are stored locally for demo.
+- The public site is positioned as a product information pack service, not a software roadmap.
+- SKU records can be prepared through the create flow and shared as Product Info Pack links.
+- Lead capture can send to `LEAD_DESTINATION_URL`; without it, submissions are kept as a local fallback.
 - PDF export uses browser Print / Save as PDF.
 - QR code generation is currently represented by a product page link.
 
@@ -47,10 +46,10 @@ backup/old-liucaiku-2026-06-03/
 - React 18
 - TypeScript
 - Tailwind CSS
-- localStorage persistence
+- Client-side draft persistence
 - Local SVG assets in `public/images`
 
-No Google Fonts, external CDN scripts, remote fonts, database or AI API are required for the first version.
+No Google Fonts, external CDN scripts or remote fonts are required.
 
 ## File Structure
 
@@ -183,7 +182,7 @@ The core generator is in:
 lib/generatePack.ts
 ```
 
-The first version uses deterministic rules:
+The current generation flow uses deterministic rules:
 
 - Jewelry emphasizes materials, skin contact and care.
 - Fashion accessories emphasize size, material, styling and care.

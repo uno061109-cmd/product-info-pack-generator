@@ -7,7 +7,7 @@ const html = `<!doctype html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>留材库 Product Pack | 跨境商品资料包生成器</title>
+    <title>留材库 Product Pack | 跨境 SKU 资料包代整理服务</title>
     <style>
       body{margin:0;background:#f6f7f9;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
       .wrap{max-width:1080px;margin:0 auto;padding:48px 24px}
@@ -23,8 +23,8 @@ const html = `<!doctype html>
       <section class="card">
         <img src="/images/liucai-pack-logo.svg" alt="留材库 Product Pack logo" style="width:72px;height:72px;margin:0 0 22px;border:0;border-radius:18px">
         <h1>留材库 Product Pack</h1>
-        <p><strong>跨境商品资料包生成器</strong></p>
-        <p>给中国跨境电商卖家使用：把杂乱 SKU 信息整理成英文 listing、QR 产品页、包装说明和可打印产品资料包。</p>
+        <p><strong>跨境 SKU 资料包代整理服务</strong></p>
+        <p>给中国跨境电商卖家使用：把杂乱 SKU 信息整理成英文 Listing、QR 产品页、包装说明和可打印 Product Info Pack。</p>
         <p>Turn messy SKU information into structured English listings, QR product pages, packaging notes and printable product documentation packs.</p>
         <p>This lightweight preview server only shows the landing summary. Use <strong>npm run dev</strong> for the full Next.js app.</p>
         <div class="btns">

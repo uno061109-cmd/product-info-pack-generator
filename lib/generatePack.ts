@@ -275,6 +275,6 @@ export function generatePack(product: ProductInput): GeneratedPack {
 }
 
 export async function generatePackWithAI(product: ProductInput): Promise<GeneratedPack> {
-  // TODO: Replace this rules-based generator with a server-side AI API call when API keys and review workflow are ready.
+  // TODO: Replace this rules-based generator with a reviewed server-side generation workflow when ready.
   return generatePack(product);
 }
