@@ -1,6 +1,6 @@
 const { spawnSync } = require("child_process");
 
-console.log("Product Info Pack Generator deployment helper");
+console.log("留材库 Product Pack deployment helper");
 console.log("Running a local production build check before deployment.");
 
 const build = spawnSync("npm", ["run", "build"], { stdio: "inherit" });

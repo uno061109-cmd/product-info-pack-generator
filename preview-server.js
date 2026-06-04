@@ -7,7 +7,7 @@ const html = `<!doctype html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>产品资料包生成器 | Product Info Pack Generator</title>
+    <title>留材库 Product Pack | 跨境商品资料包生成器</title>
     <style>
       body{margin:0;background:#f6f7f9;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
       .wrap{max-width:1080px;margin:0 auto;padding:48px 24px}
@@ -21,9 +21,9 @@ const html = `<!doctype html>
   <body>
     <main class="wrap">
       <section class="card">
-        <img src="/images/pipg-logo.svg" alt="产品资料包生成器 logo" style="width:72px;height:72px;margin:0 0 22px;border:0;border-radius:18px">
-        <h1>产品资料包生成器</h1>
-        <p><strong>Product Info Pack Generator</strong></p>
+        <img src="/images/liucai-pack-logo.svg" alt="留材库 Product Pack logo" style="width:72px;height:72px;margin:0 0 22px;border:0;border-radius:18px">
+        <h1>留材库 Product Pack</h1>
+        <p><strong>跨境商品资料包生成器</strong></p>
         <p>给中国跨境电商卖家使用：把杂乱 SKU 信息整理成英文 listing、QR 产品页、包装说明和可打印产品资料包。</p>
         <p>Turn messy SKU information into structured English listings, QR product pages, packaging notes and printable product documentation packs.</p>
         <p>This lightweight preview server only shows the landing summary. Use <strong>npm run dev</strong> for the full Next.js app.</p>
@@ -31,7 +31,7 @@ const html = `<!doctype html>
           <a class="btn primary" href="/create">创建产品资料包</a>
           <a class="btn secondary" href="/dashboard">控制台 Dashboard</a>
         </div>
-        <img src="/images/product-pack-hero.svg" alt="Product information pack preview">
+        <img src="/images/liucai-product-pack-hero.jpg" alt="Product information pack preview">
       </section>
     </main>
   </body>
@@ -45,7 +45,7 @@ const server = http.createServer((req, res) => {
     const filePath = safeJoin("public", "images", imagePath);
 
     if (filePath && fs.existsSync(filePath)) {
-      res.writeHead(200, { "Content-Type": "image/svg+xml" });
+      res.writeHead(200, { "Content-Type": getContentType(filePath) });
       res.end(fs.readFileSync(filePath));
       return;
     }
@@ -68,4 +68,22 @@ function safeJoin(...parts) {
   const root = process.cwd();
   const filePath = pathModule.join(root, ...parts);
   return filePath.startsWith(root) ? filePath : null;
+}
+
+function getContentType(filePath) {
+  const extension = pathModule.extname(filePath).toLowerCase();
+
+  if (extension === ".png") {
+    return "image/png";
+  }
+
+  if (extension === ".jpg" || extension === ".jpeg") {
+    return "image/jpeg";
+  }
+
+  if (extension === ".webp") {
+    return "image/webp";
+  }
+
+  return "image/svg+xml";
 }

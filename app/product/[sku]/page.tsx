@@ -5,14 +5,15 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { ProductImageStrip } from "@/components/ProductImageStrip";
 import { generatePack, productPackDisclaimer } from "@/lib/generatePack";
-import { getProductBySku } from "@/lib/productStorage";
+import { decodeProductFromShare, getProductBySku } from "@/lib/productStorage";
 import { ProductInput } from "@/lib/productTypes";
 
 export default function PublicProductPage({ params }: { params: { sku: string } }) {
   const [product, setProduct] = useState<ProductInput | null>();
 
   useEffect(() => {
-    setProduct(getProductBySku(params.sku));
+    const sharedProduct = decodeProductFromShare(new URLSearchParams(window.location.search).get("data"));
+    setProduct(sharedProduct || getProductBySku(params.sku));
   }, [params.sku]);
 
   if (product === undefined) {

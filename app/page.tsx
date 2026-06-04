@@ -18,10 +18,13 @@ const deliverables = [
 ];
 
 const useCases = [
-  "饰品卖家 Jewelry",
-  "服饰配件 Fashion Accessories",
-  "家居用品 Home Goods",
+  "饰品 Jewelry",
+  "服装 Apparel",
+  "手机配件 Phone Accessories",
+  "厨房用品 Kitchenware",
   "宠物配件 Pet Accessories",
+  "玩具游戏 Toys & Games",
+  "美妆工具 Beauty Tools",
   "Etsy / Amazon / Shopify / TikTok Shop"
 ];
 
@@ -29,6 +32,12 @@ const workflow = [
   ["01", "录入 SKU 信息", "Enter SKU details", "整理材质、尺寸、重量、目标市场、包装内容、护理说明和安全提示。"],
   ["02", "检查缺失字段", "Check missing information", "自动提示必填字段、条件性风险提醒和需要补充的商品资料。"],
   ["03", "生成资料包", "Generate pack", "输出英文 listing、QR 产品页、包装文案、检查清单和可打印 PDF 资料。"]
+];
+
+const commercialSteps = [
+  ["免费试用", "先让卖家生成 1-3 个 SKU，验证资料包是否真的节省时间。"],
+  ["代整理服务", "用 20/50/100 个 SKU 的人工整理套餐先收现金，验证付费意愿。"],
+  ["订阅工具", "接入数据库、账号和支付后，按 SKU 数量和 QR 托管页收费。"]
 ];
 
 export default function HomePage() {
@@ -41,17 +50,17 @@ export default function HomePage() {
               给中国跨境电商小卖家的结构化商品资料工具
             </p>
             <div className="mb-6 flex items-center gap-3">
-              <img src="/images/pipg-logo.svg" alt="产品资料包生成器 logo" className="h-14 w-14 rounded-xl shadow-soft" />
+              <img src="/images/liucai-pack-logo.svg" alt="留材库 Product Pack logo" className="h-14 w-14 rounded-xl shadow-soft" />
               <div>
-                <p className="text-xl font-bold text-ink">产品资料包生成器</p>
-                <p className="text-sm text-slate-500">Product Info Pack Generator</p>
+                <p className="text-xl font-bold text-ink">留材库 Product Pack</p>
+                <p className="text-sm text-slate-500">跨境商品资料包生成器</p>
               </div>
             </div>
             <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal text-ink sm:text-5xl">
-              把杂乱 SKU 信息，整理成专业英文上架资料包。
+              把杂乱 SKU 信息，沉淀成可复用的跨境商品资料库。
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              面向跨境卖家的产品资料工作台：生成英文 listing、产品信息卡、包装说明、QR 产品页、缺失信息检查和可打印资料包。
+              留材库 Product Pack 面向中国跨境卖家：生成英文 listing、产品信息卡、包装说明、QR 产品页、缺失信息检查和可打印资料包。
             </p>
             <p className="mt-3 max-w-2xl leading-7 text-slate-500">
               Turn messy SKU information into structured English listings, QR product pages, packaging notes and
@@ -70,6 +79,12 @@ export default function HomePage() {
               >
                 查看示例资料包
               </Link>
+              <Link
+                href="/pricing"
+                className="focus-ring rounded-lg border border-line bg-mist px-5 py-3 text-center font-semibold text-ink transition hover:bg-white"
+              >
+                查看商业方案
+              </Link>
             </div>
             <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
               {[
@@ -85,11 +100,20 @@ export default function HomePage() {
             </div>
           </div>
           <div className="flex items-center">
-            <img
-              src="/images/product-pack-hero.svg"
-              alt="Product information pack dashboard preview"
-              className="w-full rounded-lg border border-line bg-mist shadow-soft"
-            />
+            <div className="overflow-hidden rounded-lg border border-line bg-white shadow-soft">
+              <img
+                src="/images/liucai-product-pack-hero.jpg"
+                alt="留材库 Product Pack premium desk preview"
+                className="aspect-[16/10] w-full object-cover"
+              />
+              <div className="grid gap-3 border-t border-line p-4 sm:grid-cols-3">
+                {["SKU 资料库", "QR 产品页", "打印资料包"].map((item) => (
+                  <div key={item} className="rounded-md bg-mist px-3 py-2 text-sm font-semibold text-ink">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -148,6 +172,35 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-y border-line bg-mist">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mb-8 max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">商业闭环 Business Model</p>
+            <h2 className="mt-2 text-3xl font-bold text-ink">先跑通服务收入，再升级为 SaaS 订阅。</h2>
+            <p className="mt-4 leading-7 text-slate-600">
+              当前版本已经能公开展示、创建 SKU、生成资料包、复制分享链接和收集咨询线索。下一阶段接入数据库与支付后，就能从演示工具进入真实商用。
+            </p>
+          </div>
+          <div className="grid gap-5 lg:grid-cols-3">
+            {commercialSteps.map(([title, body], index) => (
+              <div key={title} className="rounded-lg border border-line bg-white p-6 shadow-sm">
+                <span className="text-sm font-semibold text-slate-500">0{index + 1}</span>
+                <h3 className="mt-4 text-2xl font-semibold text-ink">{title}</h3>
+                <p className="mt-3 leading-7 text-slate-600">{body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/pricing" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
+              查看定价与代整理服务
+            </Link>
+            <Link href="/contact" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
+              留资咨询
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-mist">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-8 max-w-3xl">
@@ -172,6 +225,9 @@ export default function HomePage() {
           <div>
             <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">适用卖家 Use Cases</p>
             <h2 className="mt-2 text-3xl font-bold text-ink">适合 SKU 多、团队小、需要专业展示的跨境卖家。</h2>
+            <p className="mt-4 leading-7 text-slate-600">
+              创建页支持 20+ 常见跨境类目，并提供首字母检索和类目填写提示。
+            </p>
             <div className="mt-6 flex flex-wrap gap-3">
               {useCases.map((item) => (
                 <span key={item} className="rounded-full border border-line bg-mist px-4 py-2 text-sm font-semibold text-slate-700">

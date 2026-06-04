@@ -1,5 +1,44 @@
-export const productCategories = ["Jewelry", "Fashion Accessories", "Home Goods", "Pet Accessories", "Other"] as const;
-export const targetMarkets = ["EU", "UK", "US", "Global"] as const;
+export const productCategories = [
+  "Apparel",
+  "Auto Accessories",
+  "Baby & Kids",
+  "Bags & Wallets",
+  "Beauty Tools",
+  "Consumer Electronics Accessories",
+  "Craft Supplies",
+  "Fashion Accessories",
+  "Garden Supplies",
+  "Health & Personal Care Accessories",
+  "Home Decor",
+  "Home Goods",
+  "Jewelry",
+  "Kitchenware",
+  "Office & Stationery",
+  "Outdoor & Sports",
+  "Party Supplies",
+  "Pet Accessories",
+  "Phone Accessories",
+  "Seasonal Products",
+  "Shoes",
+  "Small Electronics",
+  "Tools & Hardware",
+  "Toys & Games",
+  "Travel Accessories",
+  "Other"
+] as const;
+
+export const targetMarkets = [
+  "EU",
+  "UK",
+  "US",
+  "Canada",
+  "Australia",
+  "Japan",
+  "South Korea",
+  "Middle East",
+  "Southeast Asia",
+  "Global"
+] as const;
 export const ageRestrictions = ["Not applicable", "3+", "6+", "12+", "14+"] as const;
 export const binaryAnswers = ["No", "Yes"] as const;
 
@@ -8,6 +47,44 @@ export type TargetMarket = (typeof targetMarkets)[number];
 export type AgeRestriction = (typeof ageRestrictions)[number];
 export type BinaryAnswer = (typeof binaryAnswers)[number];
 export type ProductStatus = "Draft" | "Missing Info" | "Ready";
+
+export type CategoryMeta = {
+  value: ProductCategory;
+  zh: string;
+  letter: string;
+  hint: string;
+};
+
+export const categoryMetadata: CategoryMeta[] = [
+  { value: "Apparel", zh: "服装", letter: "A", hint: "尺码、面料、洗护说明、吊牌信息" },
+  { value: "Auto Accessories", zh: "汽车配件", letter: "A", hint: "适配车型、安装提示、安全提醒" },
+  { value: "Baby & Kids", zh: "母婴儿童用品", letter: "B", hint: "年龄段、小部件、护理和安全提示" },
+  { value: "Bags & Wallets", zh: "箱包钱包", letter: "B", hint: "材质、尺寸、容量、护理说明" },
+  { value: "Beauty Tools", zh: "美妆工具", letter: "B", hint: "材质、皮肤接触、清洁和使用限制" },
+  { value: "Consumer Electronics Accessories", zh: "消费电子配件", letter: "C", hint: "兼容性、电池、包装和警示语" },
+  { value: "Craft Supplies", zh: "手工材料", letter: "C", hint: "材质、数量、年龄提示、小部件风险" },
+  { value: "Fashion Accessories", zh: "服饰配件", letter: "F", hint: "尺寸、材质、搭配用途、护理说明" },
+  { value: "Garden Supplies", zh: "园艺用品", letter: "G", hint: "户外用途、材质、包装、回收说明" },
+  { value: "Health & Personal Care Accessories", zh: "个护配件", letter: "H", hint: "皮肤接触、材质、清洁和免责声明" },
+  { value: "Home Decor", zh: "家居装饰", letter: "H", hint: "材质、尺寸、摆放用途、包装说明" },
+  { value: "Home Goods", zh: "家居用品", letter: "H", hint: "用途、尺寸、包装、回收说明" },
+  { value: "Jewelry", zh: "饰品珠宝", letter: "J", hint: "材质、皮肤接触、过敏提示、护理说明" },
+  { value: "Kitchenware", zh: "厨房用品", letter: "K", hint: "食品接触、材质、清洁、安全提示" },
+  { value: "Office & Stationery", zh: "办公文具", letter: "O", hint: "规格、材质、套装内容、小部件" },
+  { value: "Outdoor & Sports", zh: "户外运动", letter: "O", hint: "用途、尺寸、承重、使用警示" },
+  { value: "Party Supplies", zh: "派对用品", letter: "P", hint: "材质、数量、年龄和小部件提示" },
+  { value: "Pet Accessories", zh: "宠物配件", letter: "P", hint: "宠物尺寸、监督使用、清洁说明" },
+  { value: "Phone Accessories", zh: "手机配件", letter: "P", hint: "兼容性、材质、安装和电池提示" },
+  { value: "Seasonal Products", zh: "节日季节用品", letter: "S", hint: "适用场景、包装、储存、警示语" },
+  { value: "Shoes", zh: "鞋履", letter: "S", hint: "尺码、材质、鞋底、护理说明" },
+  { value: "Small Electronics", zh: "小型电子产品", letter: "S", hint: "电池、充电、使用警示、认证占位" },
+  { value: "Tools & Hardware", zh: "工具五金", letter: "T", hint: "用途、材质、使用警示、包装说明" },
+  { value: "Toys & Games", zh: "玩具游戏", letter: "T", hint: "年龄段、小部件、材质和安全警示" },
+  { value: "Travel Accessories", zh: "旅行配件", letter: "T", hint: "尺寸、材质、使用场景、护理说明" },
+  { value: "Other", zh: "其他", letter: "O", hint: "按商品实际情况补充资料" }
+];
+
+export const categoryLetters = Array.from(new Set(categoryMetadata.map((item) => item.letter))).sort();
 
 export type ProductInput = {
   productName: string;

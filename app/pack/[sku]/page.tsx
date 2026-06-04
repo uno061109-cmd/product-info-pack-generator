@@ -6,14 +6,21 @@ import { useEffect, useState } from "react";
 import { MissingInfoPanel } from "@/components/MissingInfoPanel";
 import { ProductImageStrip } from "@/components/ProductImageStrip";
 import { generatePack, productPackDisclaimer } from "@/lib/generatePack";
-import { getProductBySku } from "@/lib/productStorage";
+import { decodeProductFromShare, getProductBySku, getShareableProductPath, getShareableProductUrl } from "@/lib/productStorage";
 import { ProductInput } from "@/lib/productTypes";
 
 export default function PackPage({ params }: { params: { sku: string } }) {
   const [product, setProduct] = useState<ProductInput | null>();
+  const [shareUrl, setShareUrl] = useState("");
 
   useEffect(() => {
-    setProduct(getProductBySku(params.sku));
+    const sharedProduct = decodeProductFromShare(new URLSearchParams(window.location.search).get("data"));
+    const nextProduct = sharedProduct || getProductBySku(params.sku);
+    setProduct(nextProduct);
+
+    if (nextProduct) {
+      setShareUrl(getShareableProductUrl(nextProduct, "product"));
+    }
   }, [params.sku]);
 
   if (product === undefined) {
@@ -43,6 +50,8 @@ export default function PackPage({ params }: { params: { sku: string } }) {
 
   const pack = generatePack(product);
   const encodedSku = encodeURIComponent(product.sku);
+  const productPagePath = getShareableProductPath(product, "product");
+  const printPath = getShareableProductPath(product, "print");
   const missingItems = [...pack.missingInfo.missingFields, ...pack.missingInfo.recommendations];
 
   return (
@@ -59,12 +68,21 @@ export default function PackPage({ params }: { params: { sku: string } }) {
           <Link href={`/create?sku=${encodedSku}`} className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist">
             编辑
           </Link>
-          <Link href={`/product/${encodedSku}`} className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist">
+          <Link href={productPagePath} className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist">
             公开产品页
           </Link>
-          <Link href={`/print/${encodedSku}`} className="rounded-lg bg-ink px-4 py-2.5 font-semibold text-white transition hover:bg-slate-800">
+          <Link href={printPath} className="rounded-lg bg-ink px-4 py-2.5 font-semibold text-white transition hover:bg-slate-800">
             打印 / PDF
           </Link>
+          {shareUrl && (
+            <button
+              type="button"
+              onClick={() => navigator.clipboard?.writeText(shareUrl)}
+              className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist"
+            >
+              复制公开链接
+            </button>
+          )}
         </div>
       </div>
 

@@ -7,12 +7,13 @@ import { useEffect, useState } from "react";
 import { Field, SelectInput, TextArea, TextInput } from "@/components/Field";
 import { MissingInfoPanel } from "@/components/MissingInfoPanel";
 import { ProductImageStrip } from "@/components/ProductImageStrip";
-import { getProductBySku, upsertProduct } from "@/lib/productStorage";
+import { getProductBySku, getShareableProductPath, getShareableProductUrl, upsertProduct } from "@/lib/productStorage";
 import {
   ageRestrictions,
   binaryAnswers,
+  categoryLetters,
+  categoryMetadata,
   createEmptyProduct,
-  productCategories,
   ProductInput,
   targetMarkets
 } from "@/lib/productTypes";
@@ -22,6 +23,7 @@ export default function CreateProductPage() {
   const [product, setProduct] = useState<ProductInput>(() => createEmptyProduct());
   const [loaded, setLoaded] = useState(false);
   const [savedMessage, setSavedMessage] = useState("");
+  const [shareUrl, setShareUrl] = useState("");
 
   useEffect(() => {
     const skuParam = new URLSearchParams(window.location.search).get("sku");
@@ -44,14 +46,13 @@ export default function CreateProductPage() {
   function save(destination: "dashboard" | "pack") {
     const saved = upsertProduct(product);
     setProduct(saved);
+    setShareUrl(getShareableProductUrl(saved));
     setSavedMessage("已保存到当前浏览器。Saved to this browser.");
 
     if (destination === "pack") {
-      router.push(`/pack/${encodeURIComponent(saved.sku)}`);
+      router.push(getShareableProductPath(saved, "pack"));
       return;
     }
-
-    router.push("/dashboard");
   }
 
   if (!loaded) {
@@ -87,13 +88,9 @@ export default function CreateProductPage() {
               <Field label="SKU 编号">
                 <TextInput value={product.sku} onChange={(event) => updateField("sku", event.currentTarget.value)} placeholder="SKU-001" />
               </Field>
-              <Field label="商品类目 Category">
-                <SelectInput value={product.category} onChange={(event) => updateField("category", event.currentTarget.value as ProductInput["category"])}>
-                  {productCategories.map((category) => (
-                    <option key={category}>{category}</option>
-                  ))}
-                </SelectInput>
-              </Field>
+              <div className="md:col-span-2">
+                <CategoryPicker value={product.category} onChange={(value) => updateField("category", value)} />
+              </div>
               <Field label="目标市场 Target Market">
                 <SelectInput value={product.targetMarket} onChange={(event) => updateField("targetMarket", event.currentTarget.value as ProductInput["targetMarket"])}>
                   {targetMarkets.map((market) => (
@@ -226,6 +223,19 @@ export default function CreateProductPage() {
                 保存草稿
               </button>
               {savedMessage && <p className="text-sm text-emerald-700">{savedMessage}</p>}
+              {shareUrl && (
+                <div className="rounded-md border border-line bg-mist p-3">
+                  <p className="text-sm font-semibold text-ink">可分享公开链接</p>
+                  <p className="mt-1 break-all text-xs leading-5 text-slate-600">{shareUrl}</p>
+                  <button
+                    type="button"
+                    onClick={() => navigator.clipboard?.writeText(shareUrl)}
+                    className="mt-3 rounded-md border border-line bg-white px-3 py-2 text-sm font-semibold text-ink transition hover:bg-mist"
+                  >
+                    复制链接
+                  </button>
+                </div>
+              )}
             </div>
           </section>
         </aside>
@@ -239,6 +249,81 @@ function FormSection({ title, children }: { title: string; children: ReactNode }
     <section className="rounded-lg border border-line bg-white p-5 shadow-sm">
       <h2 className="mb-5 text-2xl font-semibold text-ink">{title}</h2>
       {children}
+    </section>
+  );
+}
+
+function CategoryPicker({
+  value,
+  onChange
+}: {
+  value: ProductInput["category"];
+  onChange: (value: ProductInput["category"]) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [letter, setLetter] = useState("All");
+  const selectedMeta = categoryMetadata.find((item) => item.value === value);
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredCategories = categoryMetadata.filter((item) => {
+    const matchesLetter = letter === "All" || item.letter === letter;
+    const matchesQuery =
+      !normalizedQuery ||
+      item.value.toLowerCase().includes(normalizedQuery) ||
+      item.zh.toLowerCase().includes(normalizedQuery) ||
+      item.hint.toLowerCase().includes(normalizedQuery);
+
+    return matchesLetter && matchesQuery;
+  });
+
+  return (
+    <section className="rounded-lg border border-line bg-mist p-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <Field label="商品类目 Category">
+          <TextInput value={query} onChange={(event) => setQuery(event.currentTarget.value)} placeholder="搜索：饰品 / pet / kitchen / phone" />
+        </Field>
+        <div>
+          <p className="text-sm font-semibold text-ink">首字母检索</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {["All", ...categoryLetters].map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setLetter(item)}
+                className={`rounded-md border px-3 py-2 text-sm font-semibold transition ${
+                  letter === item ? "border-ink bg-ink text-white" : "border-line bg-white text-slate-700 hover:bg-white"
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="mt-4 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+        {filteredCategories.map((item) => {
+          const active = item.value === value;
+
+          return (
+            <button
+              key={item.value}
+              type="button"
+              onClick={() => onChange(item.value)}
+              className={`rounded-lg border p-3 text-left transition ${
+                active ? "border-ink bg-white shadow-sm" : "border-line bg-white/70 hover:bg-white"
+              }`}
+            >
+              <span className="block font-semibold text-ink">{item.zh}</span>
+              <span className="mt-1 block text-sm text-slate-500">{item.value}</span>
+              <span className="mt-2 block text-xs leading-5 text-slate-500">{item.hint}</span>
+            </button>
+          );
+        })}
+      </div>
+      {selectedMeta && (
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          当前选择：<strong className="text-ink">{selectedMeta.zh}</strong> · {selectedMeta.hint}
+        </p>
+      )}
     </section>
   );
 }

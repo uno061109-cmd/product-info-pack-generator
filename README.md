@@ -1,6 +1,6 @@
-# Product Info Pack Generator
+# 留材库 Product Pack
 
-产品资料包生成器（Product Info Pack Generator）是一个面向中国跨境电商卖家的轻量 B2B SaaS 工具。它把 SKU 信息整理成英文 listing、产品信息卡、包装标签文案、QR 产品页、缺失信息检查、基础风险清单和可打印产品资料包。
+留材库 Product Pack 是一个面向中国跨境电商卖家的轻量 B2B SaaS 工具。它把 SKU 信息整理成英文 listing、产品信息卡、包装标签文案、QR 产品页、缺失信息检查、基础风险清单和可打印产品资料包。
 
 The site is now Chinese-first with English terminology kept for cross-border documentation workflows.
 
@@ -12,15 +12,20 @@ backup/old-liucaiku-2026-06-03/
 
 ## What Changed
 
-- The homepage `/` now shows Product Info Pack Generator.
+- The homepage `/` now shows 留材库 Product Pack.
 - The UI is Chinese-first with English helper labels.
-- A local SVG logo has been added at `public/images/pipg-logo.svg`.
+- A local SVG logo has been added at `public/images/liucai-pack-logo.svg`.
+- A premium generated hero image has been added at `public/images/liucai-product-pack-hero.jpg`.
+- Product categories have been expanded with Chinese labels, hints and initial-letter search.
+- `/pricing` and `/contact` have been added for commercial validation and lead capture.
 - Old public routes redirect to the new product workflow:
   - `/talents` and `/companies` -> `/dashboard`
   - `/student-submit` and `/company-submit` -> `/create`
   - `/about` -> `/`
-- The first version does not use a real AI API, OpenAI key, database, login or payment.
+- The first version does not require a real AI API, OpenAI key, login or payment.
 - SKU records are saved in browser localStorage.
+- Shareable product links can carry encoded SKU data in the URL for demo and client review.
+- Lead capture can send to `LEAD_WEBHOOK_URL`; without it, leads are stored locally for demo.
 - PDF export uses browser Print / Save as PDF.
 - QR code generation is currently represented by a product page link.
 
@@ -33,6 +38,8 @@ backup/old-liucaiku-2026-06-03/
 - `/pack/[sku]` generated English listing, product card, packaging text, checklist and missing information list
 - `/product/[sku]` public product information page for QR use
 - `/print/[sku]` printable / Save as PDF page
+- `/pricing` pricing and service packages
+- `/contact` lead capture and consultation form
 
 ## Tech Stack
 
@@ -58,6 +65,9 @@ No Google Fonts, external CDN scripts, remote fonts, database or AI API are requ
 │   ├── page.tsx
 │   ├── layout.tsx
 │   ├── globals.css
+│   ├── pricing/page.tsx
+│   ├── contact/page.tsx
+│   ├── api/leads/route.ts
 │   ├── about/page.tsx
 │   ├── companies/page.tsx
 │   ├── company-submit/page.tsx
@@ -75,7 +85,8 @@ No Google Fonts, external CDN scripts, remote fonts, database or AI API are requ
 ├── public
 │   ├── assets
 │   └── images
-│       ├── pipg-logo.svg
+│       ├── liucai-pack-logo.svg
+│       ├── liucai-product-pack-hero.jpg
 │       ├── dashboard-preview.svg
 │       ├── printable-pack-preview.svg
 │       ├── product-pack-hero.svg
@@ -112,7 +123,7 @@ npm run lint
 
 ## Deployment and Domain
 
-The current project can be deployed to the existing domain through the existing hosting setup. Deploying this version will replace the old public site content with Product Info Pack Generator because the homepage and old front-end routes have been replaced or redirected.
+The current project can be deployed to the existing domain through the existing hosting setup. Deploying this version will replace the old public site content with 留材库 Product Pack because the homepage and old front-end routes have been replaced or redirected.
 
 ### Can it be deployed overseas?
 
@@ -153,13 +164,16 @@ If the site is hosted on a mainland China server, confirm the ICP filing status 
 
 ## Rollback
 
-This project is not currently a git repository, so the local rollback path is the backup folder:
+The previous public site has two rollback paths:
+
+- Git rollback: revert to the commit before the latest 留材库 Product Pack optimization.
+- Manual rollback: restore files from the backup folder:
 
 ```text
 backup/old-liucaiku-2026-06-03/
 ```
 
-To restore the old site manually, copy the backed up `app`, `components`, `lib`, `public`, `scripts`, `preview-server.js` and old `README.md` back to the project root. If you later put this project in git, prefer rolling back with a git commit instead.
+To restore the old site manually, copy the backed up `app`, `components`, `lib`, `public`, `scripts`, `preview-server.js` and old `README.md` back to the project root.
 
 ## Generation Logic
 

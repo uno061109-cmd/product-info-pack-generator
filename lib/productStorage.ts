@@ -77,3 +77,63 @@ export function getPublicProductUrl(sku: string): string {
 
   return `${window.location.origin}/product/${encodeURIComponent(sku)}`;
 }
+
+function encodeBase64Url(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+
+  return window.btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/g, "");
+}
+
+function decodeBase64Url(value: string): string {
+  const padded = value.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
+  const binary = window.atob(padded);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+
+  return new TextDecoder().decode(bytes);
+}
+
+export function encodeProductForShare(product: ProductInput): string {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
+  return encodeBase64Url(JSON.stringify(product));
+}
+
+export function decodeProductFromShare(value: string | null): ProductInput | null {
+  if (!value || typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return JSON.parse(decodeBase64Url(value)) as ProductInput;
+  } catch {
+    return null;
+  }
+}
+
+export function getShareableProductUrl(product: ProductInput, route: "product" | "pack" | "print" = "product"): string {
+  const path = getShareableProductPath(product, route);
+
+  if (typeof window === "undefined") {
+    return path;
+  }
+
+  return `${window.location.origin}${path}`;
+}
+
+export function getShareableProductPath(product: ProductInput, route: "product" | "pack" | "print" = "product"): string {
+  const encodedSku = encodeURIComponent(product.sku);
+
+  if (typeof window === "undefined") {
+    return `/${route}/${encodedSku}`;
+  }
+
+  const data = encodeProductForShare(product);
+  return `/${route}/${encodedSku}${data ? `?data=${data}` : ""}`;
+}

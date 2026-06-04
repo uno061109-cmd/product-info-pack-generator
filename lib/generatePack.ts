@@ -79,6 +79,20 @@ export function analyzeMissingInfo(product: ProductInput): MissingInfoAnalysis {
     recommendations.push("If the product contains a battery, add battery handling, disposal and shipping reminders.");
   }
 
+  if (
+    product.foodContact === "Yes" &&
+    !contains(product.safetyWarnings, ["food", "dishwasher", "microwave", "heat", "contact"])
+  ) {
+    recommendations.push("If the product has food contact, add food-contact use limits, cleaning and heat-related notes.");
+  }
+
+  if (
+    (product.category === "Baby & Kids" || product.category === "Toys & Games") &&
+    product.ageRestriction === "Not applicable"
+  ) {
+    recommendations.push("For baby, kids, toys or games products, add an appropriate age restriction and safety note.");
+  }
+
   const completionPercentage = Math.round((completedRequiredFields / requiredFieldLabels.length) * 100);
   const status: ProductStatus =
     completionPercentage === 100 && recommendations.length === 0
@@ -105,8 +119,26 @@ function categoryPositioning(product: ProductInput) {
       return "Highlight size, material, styling use, comfort and everyday care.";
     case "Home Goods":
       return "Highlight intended use, dimensions, packaging, recycling and household care.";
+    case "Kitchenware":
+      return "Highlight food-contact use, material, cleaning, heat limits and packaging notes.";
     case "Pet Accessories":
       return "Highlight intended pet use, sizing, supervision, materials and cleaning notes.";
+    case "Baby & Kids":
+    case "Toys & Games":
+      return "Highlight age grading, supervision, small parts, materials and safety warnings.";
+    case "Small Electronics":
+    case "Consumer Electronics Accessories":
+    case "Phone Accessories":
+      return "Highlight compatibility, battery or charging notes, package contents and safety reminders.";
+    case "Apparel":
+    case "Shoes":
+      return "Highlight size, material, fit, styling use and care instructions.";
+    case "Bags & Wallets":
+    case "Travel Accessories":
+      return "Highlight size, capacity, material, use case and care instructions.";
+    case "Outdoor & Sports":
+    case "Tools & Hardware":
+      return "Highlight intended use, dimensions, safe operation and warnings.";
     default:
       return "Highlight clear product use, material details, packaging and seller-provided care notes.";
   }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { generatePack, productPackDisclaimer } from "@/lib/generatePack";
-import { getProductBySku, getPublicProductUrl } from "@/lib/productStorage";
+import { decodeProductFromShare, getProductBySku, getShareableProductPath, getShareableProductUrl } from "@/lib/productStorage";
 import { ProductInput } from "@/lib/productTypes";
 
 export default function PrintPackPage({ params }: { params: { sku: string } }) {
@@ -12,11 +12,12 @@ export default function PrintPackPage({ params }: { params: { sku: string } }) {
   const [productUrl, setProductUrl] = useState("");
 
   useEffect(() => {
-    const nextProduct = getProductBySku(params.sku);
+    const sharedProduct = decodeProductFromShare(new URLSearchParams(window.location.search).get("data"));
+    const nextProduct = sharedProduct || getProductBySku(params.sku);
     setProduct(nextProduct);
 
     if (nextProduct) {
-      setProductUrl(getPublicProductUrl(nextProduct.sku));
+      setProductUrl(getShareableProductUrl(nextProduct, "product"));
     }
   }, [params.sku]);
 
@@ -39,12 +40,13 @@ export default function PrintPackPage({ params }: { params: { sku: string } }) {
   }
 
   const pack = generatePack(product);
+  const packPath = getShareableProductPath(product, "pack");
   const missingItems = [...pack.missingInfo.missingFields, ...pack.missingInfo.recommendations];
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="no-print mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Link href={`/pack/${encodeURIComponent(product.sku)}`} className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist">
+        <Link href={packPath} className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist">
           返回资料包
         </Link>
         <button
