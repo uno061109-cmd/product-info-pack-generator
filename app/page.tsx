@@ -36,7 +36,7 @@ const useCases = [
 ];
 
 const serviceHighlights = [
-  ["1 个 SKU 免费试做", "先看交付效果，再决定是否批量整理。"],
+  ["3 个 SKU 免费体验", "先自助体验 3 个 SKU，再决定是否批量整理。"],
   ["20 / 50 / 100 SKU 套餐", "适合店铺上新、旧品资料标准化和团队内部归档。"],
   ["中文沟通，英文交付", "你用中文提交资料，我们整理成英文跨境商品资料包。"]
 ];
@@ -69,10 +69,10 @@ export default function HomePage() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/contact?plan=免费试做 1 个 SKU"
+                href="/create"
                 className="focus-ring rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-slate-800"
               >
-                免费试做 1 个 SKU
+                免费体验 3 个 SKU
               </Link>
               <Link
                 href="/pack/SAMPLE-JWL-001"
@@ -165,7 +165,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-8 max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">服务方式 Service</p>
-            <h2 className="mt-2 text-3xl font-bold text-ink">先免费试做 1 个 SKU，满意后再批量整理。</h2>
+            <h2 className="mt-2 text-3xl font-bold text-ink">先免费体验 3 个 SKU，满意后再批量整理。</h2>
             <p className="mt-4 leading-7 text-slate-600">
               你不需要研究表格模板或英文格式。把商品资料发给我们，我们按 SKU 输出可交付的英文 Product Info Pack。
             </p>
@@ -183,8 +183,8 @@ export default function HomePage() {
             <Link href="/pricing" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
               查看整理套餐
             </Link>
-            <Link href="/contact?plan=免费试做 1 个 SKU" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
-              预约免费试做
+            <Link href="/pricing" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
+              查看付费套餐
             </Link>
           </div>
         </div>
@@ -242,16 +242,16 @@ export default function HomePage() {
       <section className="border-y border-line bg-ink text-white">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 md:grid-cols-[1fr_auto] md:items-center lg:px-8">
           <div>
-            <h2 className="text-3xl font-bold">先试做 1 个 SKU。</h2>
+            <h2 className="text-3xl font-bold">先免费体验 3 个 SKU。</h2>
             <p className="mt-3 max-w-2xl leading-7 text-slate-300">
-              看完样稿后，再决定是否整理 20、50 或 100 个 SKU。
+              超过免费额度后，再选择 20、50 或 100 个 SKU 套餐。
             </p>
           </div>
           <Link
-            href="/contact?plan=免费试做 1 个 SKU"
+            href="/create"
             className="focus-ring rounded-lg bg-white px-5 py-3 text-center font-semibold text-ink transition hover:bg-slate-100"
           >
-            免费试做 1 个 SKU
+            开始免费体验
           </Link>
         </div>
       </section>

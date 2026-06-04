@@ -18,6 +18,8 @@ backup/old-liucaiku-2026-06-03/
 - A premium generated hero image has been added at `public/images/liucai-product-pack-hero.jpg`.
 - Product categories have been expanded with Chinese labels, hints and initial-letter search.
 - `/pricing` and `/contact` have been added for commercial validation and lead capture.
+- Free self-service usage is limited to 3 SKU drafts before the pricing path is shown.
+- WeChat Pay and Alipay collection images are presented as folded payment cards on `/pricing`.
 - Old public routes redirect to the new product workflow:
   - `/talents` and `/companies` -> `/dashboard`
   - `/student-submit` and `/company-submit` -> `/create`
@@ -89,7 +91,10 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 │       ├── dashboard-preview.svg
 │       ├── printable-pack-preview.svg
 │       ├── product-pack-hero.svg
-│       └── qr-product-page-preview.svg
+│       ├── qr-product-page-preview.svg
+│       └── payments
+│           ├── alipay-pay.jpg
+│           └── wechat-pay.jpg
 ├── scripts/deploy-vercel.js
 ├── preview-server.js
 ├── next.config.mjs
@@ -119,6 +124,14 @@ npm run build
 npm run start
 npm run lint
 ```
+
+## Commercial Flow
+
+- Free plan: 3 self-service SKU Product Info Packs.
+- Starter: ¥39 / 20 SKU.
+- Growth: ¥359 / 50 SKU.
+- Bulk: ¥999 / 100 SKU.
+- Payment collection is currently QR-based with manual confirmation through the contact form.
 
 ## Deployment and Domain
 

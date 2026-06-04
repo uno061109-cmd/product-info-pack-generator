@@ -7,7 +7,16 @@ import { useEffect, useState } from "react";
 import { Field, SelectInput, TextArea, TextInput } from "@/components/Field";
 import { MissingInfoPanel } from "@/components/MissingInfoPanel";
 import { ProductImageStrip } from "@/components/ProductImageStrip";
-import { getProductBySku, getShareableProductPath, getShareableProductUrl, upsertProduct } from "@/lib/productStorage";
+import {
+  FREE_SKU_LIMIT,
+  getFreeQuotaUsage,
+  getProductBySku,
+  getProducts,
+  getShareableProductPath,
+  getShareableProductUrl,
+  normalizeSku,
+  upsertProduct
+} from "@/lib/productStorage";
 import {
   ageRestrictions,
   binaryAnswers,
@@ -24,15 +33,23 @@ export default function CreateProductPage() {
   const [loaded, setLoaded] = useState(false);
   const [savedMessage, setSavedMessage] = useState("");
   const [shareUrl, setShareUrl] = useState("");
+  const [quotaUsage, setQuotaUsage] = useState(0);
+  const [quotaExceeded, setQuotaExceeded] = useState(false);
 
   useEffect(() => {
     const skuParam = new URLSearchParams(window.location.search).get("sku");
+    const usage = getFreeQuotaUsage();
+    setQuotaUsage(usage);
 
     if (skuParam) {
       const existing = getProductBySku(skuParam);
       if (existing) {
         setProduct(existing);
+      } else if (usage >= FREE_SKU_LIMIT) {
+        setQuotaExceeded(true);
       }
+    } else if (usage >= FREE_SKU_LIMIT) {
+      setQuotaExceeded(true);
     }
 
     setLoaded(true);
@@ -44,8 +61,16 @@ export default function CreateProductPage() {
   }
 
   function save(destination: "dashboard" | "pack") {
+    const isExistingSku = getProducts().some((item) => normalizeSku(item.sku) === normalizeSku(product.sku));
+
+    if (quotaExceeded || (!isExistingSku && getFreeQuotaUsage() >= FREE_SKU_LIMIT)) {
+      setQuotaExceeded(true);
+      return;
+    }
+
     const saved = upsertProduct(product);
     setProduct(saved);
+    setQuotaUsage(getFreeQuotaUsage());
     setShareUrl(getShareableProductUrl(saved));
     setSavedMessage("已保存。你可以继续补充资料，或查看完整 Product Info Pack。");
 
@@ -74,6 +99,42 @@ export default function CreateProductPage() {
     );
   }
 
+  if (quotaExceeded) {
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+        <section className="rounded-lg border border-line bg-white p-8 shadow-sm">
+          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">免费额度已用完 Free quota used</p>
+          <h1 className="mt-3 text-4xl font-bold text-ink">你已经体验了 {FREE_SKU_LIMIT} 个免费 SKU。</h1>
+          <p className="mt-4 max-w-2xl leading-7 text-slate-600">
+            免费版支持自助创建 {FREE_SKU_LIMIT} 个 SKU 资料包。继续创建更多 Product Info Pack，请选择套餐并完成付款确认。
+          </p>
+          <div className="mt-6 grid gap-3 rounded-lg border border-line bg-mist p-4 text-sm text-slate-700 sm:grid-cols-3">
+            <div>
+              <p className="font-semibold text-ink">Starter</p>
+              <p className="mt-1">¥39 / 20 个 SKU</p>
+            </div>
+            <div>
+              <p className="font-semibold text-ink">Growth</p>
+              <p className="mt-1">¥359 / 50 个 SKU</p>
+            </div>
+            <div>
+              <p className="font-semibold text-ink">Bulk</p>
+              <p className="mt-1">¥999 / 100 个 SKU</p>
+            </div>
+          </div>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <Link href="/pricing" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
+              查看套餐并付款
+            </Link>
+            <Link href="/contact?plan=额度开通咨询" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
+              联系确认开通
+            </Link>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -82,6 +143,9 @@ export default function CreateProductPage() {
           <h1 className="mt-2 text-4xl font-bold text-ink">创建产品资料包</h1>
           <p className="mt-3 max-w-2xl leading-7 text-slate-600">
             录入一个 SKU 的基础资料，整理成英文 Listing、包装说明、QR 产品页和可打印 Product Info Pack。
+          </p>
+          <p className="mt-2 text-sm text-slate-500">
+            免费自助体验：已使用 {quotaUsage} / {FREE_SKU_LIMIT} 个 SKU。
           </p>
         </div>
         <Link href="/dashboard" className="rounded-lg border border-line bg-white px-4 py-2.5 text-center font-semibold text-ink transition hover:bg-mist">

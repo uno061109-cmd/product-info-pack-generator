@@ -1,6 +1,7 @@
 import { ProductInput, sampleProduct } from "@/lib/productTypes";
 
 export const PRODUCT_STORAGE_KEY = "product-info-pack-generator-products-v1";
+export const FREE_SKU_LIMIT = 3;
 
 export function normalizeSku(value: string): string {
   const normalized = value
@@ -24,6 +25,10 @@ export function getProducts(): ProductInput[] {
   } catch {
     return [];
   }
+}
+
+export function getFreeQuotaUsage(): number {
+  return getProducts().length;
 }
 
 export function saveProducts(products: ProductInput[]) {

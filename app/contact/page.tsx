@@ -11,6 +11,9 @@ type Lead = {
   skuCount: string;
   trialSku: string;
   plan: string;
+  paymentStatus: string;
+  paymentMethod: string;
+  paymentNote: string;
   message: string;
   createdAt: string;
 };
@@ -24,18 +27,28 @@ export default function ContactPage() {
     platform: "Amazon",
     category: "",
     skuCount: "",
-    trialSku: "需要免费试做 1 个 SKU",
-    plan: "免费试做 1 个 SKU",
+    trialSku: "需要免费体验 3 个 SKU",
+    plan: "免费体验 3 个 SKU",
+    paymentStatus: "还未付款，想先咨询",
+    paymentMethod: "未付款",
+    paymentNote: "",
     message: "",
     createdAt: ""
   });
   const [status, setStatus] = useState("");
 
   useEffect(() => {
-    const plan = new URLSearchParams(window.location.search).get("plan");
+    const searchParams = new URLSearchParams(window.location.search);
+    const plan = searchParams.get("plan");
+    const payment = searchParams.get("payment");
 
-    if (plan) {
-      setLead((current) => ({ ...current, plan, trialSku: plan.includes("免费") ? "需要免费试做 1 个 SKU" : current.trialSku }));
+    if (plan || payment) {
+      setLead((current) => ({
+        ...current,
+        plan: plan || current.plan,
+        trialSku: plan?.includes("免费") ? "需要免费体验 3 个 SKU" : "已有批量需求，想直接咨询套餐",
+        paymentStatus: payment === "paid" ? "已扫码付款，等待确认" : current.paymentStatus
+      }));
     }
   }, []);
 
@@ -65,8 +78,11 @@ export default function ContactPage() {
       platform: "Amazon",
       category: "",
       skuCount: "",
-      trialSku: "需要免费试做 1 个 SKU",
+      trialSku: "需要免费体验 3 个 SKU",
       plan: lead.plan,
+      paymentStatus: "还未付款，想先咨询",
+      paymentMethod: "未付款",
+      paymentNote: "",
       message: "",
       createdAt: ""
     });
@@ -97,6 +113,12 @@ export default function ContactPage() {
               英文 Listing、产品信息卡、包装说明、安全提醒、QR 产品信息页、可打印 PDF、Missing Information List 和 Basic Risk Checklist。
             </p>
           </div>
+          <div className="mt-5 rounded-lg border border-line bg-white p-5 shadow-sm">
+            <p className="font-semibold text-ink">付款确认</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              如果你已经扫码付款，请在表单里填写付款方式、套餐和付款备注。我们会人工确认后联系你安排开通或交付。
+            </p>
+          </div>
         </div>
 
         <form onSubmit={submitLead} className="rounded-lg border border-line bg-white p-6 shadow-sm">
@@ -122,20 +144,41 @@ export default function ContactPage() {
             <Field label="预计 SKU 数量">
               <input value={lead.skuCount} onChange={(event) => setLead({ ...lead, skuCount: event.currentTarget.value })} placeholder="例如：1 / 20 / 50 / 100+" className="input" />
             </Field>
-            <Field label="是否需要免费试做 1 个 SKU">
+            <Field label="是否需要免费体验 3 个 SKU">
               <select value={lead.trialSku} onChange={(event) => setLead({ ...lead, trialSku: event.currentTarget.value })} className="input">
-                <option>需要免费试做 1 个 SKU</option>
+                <option>需要免费体验 3 个 SKU</option>
                 <option>已有批量需求，想直接咨询套餐</option>
               </select>
             </Field>
             <Field label="感兴趣套餐">
               <select value={lead.plan} onChange={(event) => setLead({ ...lead, plan: event.currentTarget.value })} className="input">
-                <option>免费试做 1 个 SKU</option>
+                <option>免费体验 3 个 SKU</option>
                 <option>Starter 20 个 SKU</option>
                 <option>Growth 50 个 SKU</option>
                 <option>Bulk 100 个 SKU</option>
-                <option>预约工具版</option>
+                <option>额度开通咨询</option>
               </select>
+            </Field>
+            <Field label="付款状态">
+              <select value={lead.paymentStatus} onChange={(event) => setLead({ ...lead, paymentStatus: event.currentTarget.value })} className="input">
+                <option>还未付款，想先咨询</option>
+                <option>已扫码付款，等待确认</option>
+              </select>
+            </Field>
+            <Field label="付款方式">
+              <select value={lead.paymentMethod} onChange={(event) => setLead({ ...lead, paymentMethod: event.currentTarget.value })} className="input">
+                <option>未付款</option>
+                <option>微信支付</option>
+                <option>支付宝</option>
+              </select>
+            </Field>
+            <Field label="付款备注 / 金额">
+              <input
+                value={lead.paymentNote}
+                onChange={(event) => setLead({ ...lead, paymentNote: event.currentTarget.value })}
+                placeholder="例如：6月4日 21:30，Growth ¥359"
+                className="input"
+              />
             </Field>
           </div>
           <Field label="备注">

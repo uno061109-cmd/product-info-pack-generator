@@ -59,7 +59,7 @@ export default function DashboardPage() {
           href="/create"
           className="focus-ring rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft transition hover:bg-slate-800"
         >
-          创建第一个 SKU
+          创建新 SKU
         </Link>
       </div>
 

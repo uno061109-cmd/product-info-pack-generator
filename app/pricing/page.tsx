@@ -2,13 +2,13 @@ import Link from "next/link";
 
 const servicePlans = [
   {
-    name: "免费试做",
+    name: "免费体验",
     price: "¥0",
-    title: "1 个 SKU 示例资料包",
+    title: "3 个 SKU 自助体验",
     fit: "第一次了解效果的小卖家",
-    cta: "免费试做 1 个 SKU",
-    planQuery: "免费试做 1 个 SKU",
-    features: ["英文 Listing 示例", "产品信息卡", "包装说明", "Missing Info List", "PDF 示例"]
+    cta: "免费体验 3 个 SKU",
+    planQuery: "免费体验 3 个 SKU",
+    features: ["3 个 SKU Product Info Pack", "英文 Listing 示例", "产品信息卡", "包装说明", "Missing Info List", "PDF 示例"]
   },
   {
     name: "Starter",
@@ -21,7 +21,7 @@ const servicePlans = [
   },
   {
     name: "Growth",
-    price: "¥299",
+    price: "¥359",
     title: "50 个 SKU 资料整理",
     fit: "店铺一批商品标准化",
     cta: "咨询 50 个 SKU",
@@ -42,8 +42,23 @@ const servicePlans = [
 
 const paymentNotes = [
   "提交需求后，我们会在 24 小时内联系你确认品类、SKU 数量和资料范围。",
-  "确认后可通过微信或支付宝付款；付款方式会在沟通中发送。",
-  "免费试做适合先看交付格式，不承诺覆盖复杂法规判断。"
+  "选择套餐后可扫码付款；付款时建议备注微信号、套餐名和 SKU 数量。",
+  "付款后请提交咨询表单，便于我们确认开通和交付安排。"
+];
+
+const paymentMethods = [
+  {
+    name: "微信支付",
+    image: "/images/payments/wechat-pay.jpg",
+    tone: "text-emerald-700",
+    note: "适合微信扫码付款，付款备注建议写：微信号 + 套餐名。"
+  },
+  {
+    name: "支付宝",
+    image: "/images/payments/alipay-pay.jpg",
+    tone: "text-blue-700",
+    note: "适合支付宝扫码付款，付款备注建议写：联系方式 + 套餐名。"
+  }
 ];
 
 export default function PricingPage() {
@@ -52,9 +67,9 @@ export default function PricingPage() {
       <section className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
         <div>
           <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">整理套餐 Pricing</p>
-          <h1 className="mt-2 text-4xl font-bold leading-tight text-ink">先试做 1 个 SKU，满意后再批量整理</h1>
+          <h1 className="mt-2 text-4xl font-bold leading-tight text-ink">免费体验 3 个 SKU，满意后再选择套餐</h1>
           <p className="mt-4 leading-7 text-slate-600">
-            你只需要提供商品资料，我们帮你整理成英文上架资料包、产品信息卡、包装说明、QR 产品页和可打印 PDF。
+            你可以先自助生成 3 个 SKU 的 Product Info Pack。继续批量整理时，选择套餐并扫码付款，我们确认后安排开通和交付。
           </p>
         </div>
         <div className="rounded-lg border border-line bg-white p-5 shadow-sm">
@@ -111,7 +126,7 @@ export default function PricingPage() {
             <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">付款与沟通 Payment</p>
             <h2 className="mt-2 text-3xl font-bold text-ink">先确认需求，再开始整理。</h2>
             <p className="mt-3 leading-7 text-slate-600">
-              为了避免你买错套餐，我们会先确认 SKU 数量、商品品类、资料完整度和交付格式。
+              为了避免你买错套餐，我们建议先确认 SKU 数量、商品品类、资料完整度和交付格式，再付款或提交付款备注。
             </p>
           </div>
           <ul className="grid gap-3 text-slate-700">
@@ -124,18 +139,61 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section className="mt-10 rounded-lg border border-line bg-mist p-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <section className="mt-10 rounded-lg border border-line bg-white p-6 shadow-sm">
+        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">工具版 Tool Edition</p>
-            <h2 className="mt-2 text-2xl font-bold text-ink">工具版即将开放</h2>
-            <p className="mt-2 max-w-3xl leading-7 text-slate-600">
-              如果你希望长期自己管理 SKU，可以预约工具版体验名额。当前阶段我们优先提供代整理交付服务。
+            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">扫码付款 Payment</p>
+            <h2 className="mt-2 text-3xl font-bold text-ink">选择套餐后，用微信或支付宝付款。</h2>
+            <p className="mt-3 max-w-3xl leading-7 text-slate-600">
+              收款码默认收起，避免页面显得突兀。付款后请在咨询表单里填写联系方式、套餐和付款备注，我们会确认后联系你。
             </p>
           </div>
-          <Link href="/contact?plan=预约工具版" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
-            预约工具版
+          <Link href="/contact?plan=额度开通咨询&payment=paid" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
+            已付款，提交信息
           </Link>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-2">
+          {paymentMethods.map((method) => (
+            <details key={method.name} className="group rounded-lg border border-line bg-mist p-5">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+                <div>
+                  <p className={`text-lg font-bold ${method.tone}`}>{method.name}</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">{method.note}</p>
+                </div>
+                <span className="shrink-0 rounded-md border border-line bg-white px-3 py-2 text-sm font-semibold text-ink group-open:hidden">
+                  展开收款码
+                </span>
+                <span className="hidden shrink-0 rounded-md border border-line bg-white px-3 py-2 text-sm font-semibold text-ink group-open:inline-flex">
+                  收起
+                </span>
+              </summary>
+              <div className="mt-5 rounded-lg border border-line bg-white p-4">
+                <img src={method.image} alt={`${method.name}收款码`} className="mx-auto max-h-[420px] w-full max-w-[280px] rounded-md object-contain" />
+                <p className="mt-4 rounded-md bg-mist px-3 py-2 text-center text-sm leading-6 text-slate-600">
+                  付款后请回到咨询页提交联系方式、套餐和付款备注。
+                </p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-10 rounded-lg border border-line bg-mist p-6">
+        <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">开通方式 Activation</p>
+        <h2 className="mt-2 text-2xl font-bold text-ink">免费 3 个 SKU，超过后选择套餐。</h2>
+        <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          {[
+            ["01", "免费体验", "先在 Create 页面自助生成 3 个 SKU，确认资料包格式是否适合你的店铺。"],
+            ["02", "扫码付款", "选择 Starter、Growth 或 Bulk 套餐，用微信或支付宝付款，并备注联系方式。"],
+            ["03", "确认开通", "提交咨询表单后，我们人工确认付款和需求，再安排套餐开通或资料交付。"]
+          ].map(([number, title, body]) => (
+            <div key={title} className="rounded-lg border border-line bg-white p-5">
+              <span className="text-sm font-semibold text-slate-500">{number}</span>
+              <h3 className="mt-3 text-xl font-semibold text-ink">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
+            </div>
+          ))}
         </div>
       </section>
     </main>
