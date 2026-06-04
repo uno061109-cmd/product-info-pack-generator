@@ -116,7 +116,7 @@ export default function ContactPage() {
           <div className="mt-5 rounded-lg border border-line bg-white p-5 shadow-sm">
             <p className="font-semibold text-ink">付款确认</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              如果你已经扫码付款，请在表单里填写付款方式、套餐和付款备注。我们会人工确认后联系你安排开通或交付。
+              如果你已经扫码付款，请在表单里填写付款方式、套餐和付款备注。请尽量使用登录邮箱，方便我们在后台开通 SKU 额度。
             </p>
           </div>
         </div>
@@ -127,7 +127,13 @@ export default function ContactPage() {
               <input required value={lead.name} onChange={(event) => setLead({ ...lead, name: event.currentTarget.value })} className="input" />
             </Field>
             <Field label="微信或邮箱">
-              <input required value={lead.contact} onChange={(event) => setLead({ ...lead, contact: event.currentTarget.value })} placeholder="微信号 / 邮箱" className="input" />
+              <input
+                required
+                value={lead.contact}
+                onChange={(event) => setLead({ ...lead, contact: event.currentTarget.value })}
+                placeholder="建议填写登录邮箱，也可填写微信号"
+                className="input"
+              />
             </Field>
             <Field label="店铺平台">
               <select value={lead.platform} onChange={(event) => setLead({ ...lead, platform: event.currentTarget.value })} className="input">

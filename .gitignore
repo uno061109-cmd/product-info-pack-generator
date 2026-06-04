@@ -6,6 +6,7 @@ dist
 *.log
 .DS_Store
 .env*
+!.env.example
 backup/
 public/assets/
 public/images/liucai-product-pack-hero.png
