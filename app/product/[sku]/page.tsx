@@ -17,15 +17,15 @@ export default function PublicProductPage({ params }: { params: { sku: string } 
   }, [params.sku]);
 
   if (product === undefined) {
-    return <main className="mx-auto max-w-3xl px-4 py-8">Loading product page...</main>;
+    return <main className="mx-auto max-w-3xl px-4 py-8">正在打开产品信息页...</main>;
   }
 
   if (!product) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-8">
         <section className="rounded-lg border border-line bg-white p-8 text-center shadow-sm">
-          <h1 className="text-3xl font-bold text-ink">未找到商品 Product not found</h1>
-          <p className="mt-3 leading-7 text-slate-600">这个 SKU 当前不在本浏览器中。This SKU is not available in this browser.</p>
+          <h1 className="text-3xl font-bold text-ink">未找到商品</h1>
+          <p className="mt-3 leading-7 text-slate-600">这个 SKU 当前不在本浏览器中。</p>
           <Link href="/dashboard" className="mt-6 inline-flex rounded-lg bg-ink px-5 py-3 font-semibold text-white">
             打开控制台
           </Link>
@@ -71,7 +71,7 @@ export default function PublicProductPage({ params }: { params: { sku: string } 
             </div>
           </section>
 
-          <InfoBlock title="卖家联系信息占位 Seller Contact Placeholder">
+          <InfoBlock title="卖家联系信息">
             {product.manufacturerImporterInfo || "Seller contact / manufacturer / importer details to be added."}
           </InfoBlock>
 

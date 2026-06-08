@@ -19,8 +19,8 @@ backup/old-liucaiku-2026-06-03/
 - Product categories have been expanded with Chinese labels, hints and initial-letter search.
 - `/pricing` and `/contact` have been added for commercial validation and lead capture.
 - Free self-service usage is limited to 3 SKU drafts before the pricing path is shown.
-- Pricing now routes paid plans to `/checkout`, where WeChat Pay and Alipay QR codes are shown directly.
-- Email numeric-code registration/login, password login, `/account`, and `/admin` support manual subscription activation by customer email.
+- Pricing now routes paid plans to `/checkout`, where customers add WeChat to confirm subscription activation.
+- Email/password registration and login, `/account`, and `/admin` support manual subscription activation by customer email.
 - Product image handling supports uploaded local images, image URLs, and an auto-generated SKU visual fallback.
 - Old public routes redirect to the new product workflow:
   - `/talents` and `/companies` -> `/dashboard`
@@ -42,9 +42,9 @@ backup/old-liucaiku-2026-06-03/
 - `/product/[sku]` public product information page for QR use
 - `/print/[sku]` printable / Save as PDF page
 - `/pricing` pricing and service packages
-- `/checkout` QR payment confirmation page
+- `/checkout` WeChat consultation and plan activation page
 - `/contact` lead capture and consultation form
-- `/login` email numeric-code registration/login and password login
+- `/login` email/password registration and login
 - `/account` customer subscription and quota view
 - `/admin` admin subscription management
 
@@ -79,6 +79,7 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 │   ├── account/page.tsx
 │   ├── admin/page.tsx
 │   ├── api/leads/route.ts
+│   ├── api/auth/register/route.ts
 │   ├── api/admin/users/route.ts
 │   ├── about/page.tsx
 │   ├── companies/page.tsx
@@ -107,9 +108,7 @@ No Google Fonts, external CDN scripts or remote fonts are required.
 │       ├── printable-pack-preview.svg
 │       ├── product-pack-hero.svg
 │       ├── qr-product-page-preview.svg
-│       └── payments
-│           ├── alipay-pay.jpg
-│           └── wechat-pay.jpg
+│       └── contact/wechat-contact.jpg
 ├── scripts/deploy-vercel.js
 ├── supabase/schema.sql
 ├── preview-server.js
@@ -148,8 +147,8 @@ npm run lint
 - Starter: ¥39 / 20 SKU.
 - Growth: ¥359 / 50 SKU.
 - Bulk: ¥999 / 100 SKU.
-- Payment collection is currently QR-based with direct QR display on `/checkout` and manual confirmation through the contact form.
-- Admin flow: customer registers/logs in with email, pays by QR code, submits contact/payment note, then admin opens `/admin` and assigns a plan/quota.
+- Customers select a plan on `/checkout`, add the service WeChat account, and confirm payment and requirements directly.
+- Admin flow: customer registers/logs in with email and password, confirms the plan through WeChat, then admin opens `/admin` and assigns a plan/quota.
 - If the customer has not logged in yet, the admin can enter the customer email in `/admin` and create/open the paid quota manually.
 
 ## Login and Admin Setup
@@ -175,17 +174,16 @@ LEAD_DESTINATION_URL=optional_lead_destination_url
 
 The same keys are listed in `.env.example`.
 
-4. In Supabase Auth settings, allow the site URL and redirect URL:
+4. In Supabase Auth settings, keep the site URL configured:
 
 ```text
 https://liucaiku.com
-https://liucaiku.com/account
 ```
 
-5. In Supabase Auth email templates, make sure the email clearly shows the numeric token, for example: `Your login code is {{ .Token }}`. Users should not need to click the email link.
-6. Use the admin email in `ADMIN_EMAILS` to log in at `/login`, then open `/admin`.
+5. Users register with email and password through `/login`. The server-side registration route creates an already-confirmed Supabase account, so no email link is required.
+6. Use the admin email in `ADMIN_EMAILS` to register or log in at `/login`, then open `/admin`.
 
-Phone, WeChat and QQ login are not enabled in this version because they require SMS providers or platform app credentials. Email numeric code and password login are the first supported login methods.
+Phone, WeChat and QQ login are not enabled in this version because they require SMS providers or platform app credentials. Email and password are the supported login method.
 
 ## Deployment and Domain
 

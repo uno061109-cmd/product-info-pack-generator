@@ -6,7 +6,14 @@ import { useEffect, useState } from "react";
 import { MissingInfoPanel } from "@/components/MissingInfoPanel";
 import { ProductImageStrip } from "@/components/ProductImageStrip";
 import { generatePack, productPackDisclaimer } from "@/lib/generatePack";
-import { decodeProductFromShare, getProductBySku, getShareableProductPath, getShareableProductUrl } from "@/lib/productStorage";
+import {
+  decodeProductFromShare,
+  getProductBySku,
+  getShareableProductPath,
+  getShareableProductUrl,
+  normalizeSku
+} from "@/lib/productStorage";
+import { createProductVisualDataUri } from "@/lib/productVisual";
 import { ProductInput } from "@/lib/productTypes";
 
 export default function PackPage({ params }: { params: { sku: string } }) {
@@ -24,16 +31,16 @@ export default function PackPage({ params }: { params: { sku: string } }) {
   }, [params.sku]);
 
   if (product === undefined) {
-    return <PageShell>Loading product pack...</PageShell>;
+    return <PageShell>正在整理产品资料包...</PageShell>;
   }
 
   if (!product) {
     return (
       <PageShell>
         <section className="rounded-lg border border-line bg-white p-8 text-center shadow-sm">
-          <h1 className="text-3xl font-bold text-ink">未找到商品 Product not found</h1>
+          <h1 className="text-3xl font-bold text-ink">未找到商品</h1>
           <p className="mx-auto mt-3 max-w-xl leading-7 text-slate-600">
-            This SKU is not stored in this browser. Create it again or open the sample pack.
+            这个 SKU 尚未保存在当前浏览器中，请重新创建，或先查看示例资料包。
           </p>
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/create" className="rounded-lg bg-ink px-5 py-3 font-semibold text-white">
@@ -54,11 +61,18 @@ export default function PackPage({ params }: { params: { sku: string } }) {
   const printPath = getShareableProductPath(product, "print");
   const missingItems = [...pack.missingInfo.missingFields, ...pack.missingInfo.recommendations];
 
+  function downloadSkuVisual() {
+    const link = document.createElement("a");
+    link.href = createProductVisualDataUri(product);
+    link.download = `${normalizeSku(product.sku || product.productName || "SKU")}-preview.svg`;
+    link.click();
+  }
+
   return (
     <PageShell>
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">已生成资料包 Generated Pack</p>
+          <p className="text-sm font-semibold text-slate-500">已生成资料包</p>
           <h1 className="mt-2 text-4xl font-bold text-ink">{product.productName}</h1>
           <p className="mt-3 text-slate-600">
             {product.sku} · {product.category} · {product.targetMarket}
@@ -74,6 +88,13 @@ export default function PackPage({ params }: { params: { sku: string } }) {
           <Link href={printPath} className="rounded-lg bg-ink px-4 py-2.5 font-semibold text-white transition hover:bg-slate-800">
             打印 / PDF
           </Link>
+          <button
+            type="button"
+            onClick={downloadSkuVisual}
+            className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist"
+          >
+            下载 SKU 预览图
+          </button>
           {shareUrl && (
             <button
               type="button"
@@ -191,9 +212,18 @@ export default function PackPage({ params }: { params: { sku: string } }) {
         </div>
 
         <aside className="space-y-5 lg:sticky lg:top-28 lg:self-start">
+          <section className="rounded-lg border border-line bg-ink p-5 text-white shadow-sm">
+            <p className="text-sm font-semibold text-slate-300">保存与交付</p>
+            <h2 className="mt-2 text-xl font-semibold">资料包已经生成</h2>
+            <div className="mt-4 grid gap-2 text-sm leading-6 text-slate-200">
+              <p>打印 / PDF：保存完整资料包。</p>
+              <p>复制公开链接：发给客户或用于二维码。</p>
+              <p>下载 SKU 预览图：保存商品资料视觉卡。</p>
+            </div>
+          </section>
           <MissingInfoPanel product={product} />
           <section className="rounded-lg border border-line bg-white p-5 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">产品图片 Product Images</p>
+            <p className="text-sm font-semibold text-slate-500">产品图片</p>
             <ProductImageStrip images={product.imageUrls} product={product} className="mt-4" />
           </section>
         </aside>

@@ -22,15 +22,15 @@ export default function PrintPackPage({ params }: { params: { sku: string } }) {
   }, [params.sku]);
 
   if (product === undefined) {
-    return <main className="mx-auto max-w-5xl px-4 py-10">Loading printable pack...</main>;
+    return <main className="mx-auto max-w-5xl px-4 py-10">正在准备可打印资料包...</main>;
   }
 
   if (!product) {
     return (
       <main className="mx-auto max-w-5xl px-4 py-10">
         <section className="rounded-lg border border-line bg-white p-8 text-center shadow-sm">
-          <h1 className="text-3xl font-bold text-ink">未找到商品 Product not found</h1>
-          <p className="mt-3 leading-7 text-slate-600">这个 SKU 当前不在本浏览器中。This SKU is not available in this browser.</p>
+          <h1 className="text-3xl font-bold text-ink">未找到商品</h1>
+          <p className="mt-3 leading-7 text-slate-600">这个 SKU 当前不在本浏览器中。</p>
           <Link href="/dashboard" className="mt-6 inline-flex rounded-lg bg-ink px-5 py-3 font-semibold text-white">
             打开控制台
           </Link>

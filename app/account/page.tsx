@@ -103,7 +103,7 @@ export default function AccountPage() {
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <section className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">账户 Account</p>
+          <p className="text-sm font-semibold text-slate-500">账户</p>
           <h1 className="mt-2 text-4xl font-bold text-ink">我的套餐额度</h1>
           <p className="mt-3 text-slate-600">{user.email}</p>
         </div>
@@ -140,7 +140,7 @@ export default function AccountPage() {
             创建 SKU
           </Link>
           <Link href="/checkout?plan=Growth" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
-            升级并扫码付款
+            升级并加微信开通
           </Link>
           <Link href="/pricing" className="rounded-lg border border-line bg-mist px-5 py-3 text-center font-semibold text-ink">
             查看套餐

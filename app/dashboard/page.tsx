@@ -51,7 +51,7 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">控制台 Dashboard</p>
+          <p className="text-sm font-semibold text-slate-500">控制台</p>
           <h1 className="mt-2 text-4xl font-bold text-ink">留材库 Product Pack</h1>
           <p className="mt-3 max-w-2xl leading-7 text-slate-600">
             管理试做和已整理的 SKU 资料包，查看资料完整度、公开产品页和可打印 PDF。

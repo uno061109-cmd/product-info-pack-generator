@@ -29,8 +29,8 @@ export default function ContactPage() {
     skuCount: "",
     trialSku: "需要免费体验 3 个 SKU",
     plan: "免费体验 3 个 SKU",
-    paymentStatus: "还未付款，想先咨询",
-    paymentMethod: "未付款",
+    paymentStatus: "还未添加微信，想先咨询",
+    paymentMethod: "微信沟通",
     paymentNote: "",
     message: "",
     createdAt: ""
@@ -47,7 +47,7 @@ export default function ContactPage() {
         ...current,
         plan: plan || current.plan,
         trialSku: plan?.includes("免费") ? "需要免费体验 3 个 SKU" : "已有批量需求，想直接咨询套餐",
-        paymentStatus: payment === "paid" ? "已扫码付款，等待确认" : current.paymentStatus
+        paymentStatus: payment ? "已添加微信，等待确认" : current.paymentStatus
       }));
     }
   }, []);
@@ -80,8 +80,8 @@ export default function ContactPage() {
       skuCount: "",
       trialSku: "需要免费体验 3 个 SKU",
       plan: lead.plan,
-      paymentStatus: "还未付款，想先咨询",
-      paymentMethod: "未付款",
+      paymentStatus: "还未添加微信，想先咨询",
+      paymentMethod: "微信沟通",
       paymentNote: "",
       message: "",
       createdAt: ""
@@ -92,7 +92,7 @@ export default function ContactPage() {
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <section className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">咨询 Contact</p>
+          <p className="text-sm font-semibold text-slate-500">咨询</p>
           <h1 className="mt-2 text-4xl font-bold leading-tight text-ink">提交需求，预约试做</h1>
           <p className="mt-4 leading-7 text-slate-600">
             告诉我们你的店铺平台、商品品类和预计 SKU 数量。提交后，我们会在 24 小时内联系你，确认 SKU 数量、品类和资料整理需求。
@@ -114,9 +114,9 @@ export default function ContactPage() {
             </p>
           </div>
           <div className="mt-5 rounded-lg border border-line bg-white p-5 shadow-sm">
-            <p className="font-semibold text-ink">付款确认</p>
+            <p className="font-semibold text-ink">开通确认</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              如果你已经扫码付款，请在表单里填写付款方式、套餐和付款备注。请尽量使用登录邮箱，方便我们在后台开通 SKU 额度。
+              如果你已经添加微信，请在表单里填写套餐、登录邮箱和微信备注，方便我们在后台开通 SKU 额度。
             </p>
           </div>
         </div>
@@ -165,24 +165,23 @@ export default function ContactPage() {
                 <option>额度开通咨询</option>
               </select>
             </Field>
-            <Field label="付款状态">
+            <Field label="微信开通状态">
               <select value={lead.paymentStatus} onChange={(event) => setLead({ ...lead, paymentStatus: event.currentTarget.value })} className="input">
-                <option>还未付款，想先咨询</option>
-                <option>已扫码付款，等待确认</option>
+                <option>还未添加微信，想先咨询</option>
+                <option>已添加微信，等待确认</option>
               </select>
             </Field>
-            <Field label="付款方式">
+            <Field label="确认方式">
               <select value={lead.paymentMethod} onChange={(event) => setLead({ ...lead, paymentMethod: event.currentTarget.value })} className="input">
-                <option>未付款</option>
-                <option>微信支付</option>
-                <option>支付宝</option>
+                <option>微信沟通</option>
+                <option>表单咨询</option>
               </select>
             </Field>
-            <Field label="付款备注 / 金额">
+            <Field label="微信备注 / 套餐">
               <input
                 value={lead.paymentNote}
                 onChange={(event) => setLead({ ...lead, paymentNote: event.currentTarget.value })}
-                placeholder="例如：6月4日 21:30，Growth ¥359"
+                placeholder="例如：留材库 uno@example.com Growth 50 个 SKU"
                 className="input"
               />
             </Field>

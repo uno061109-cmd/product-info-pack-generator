@@ -17,6 +17,7 @@ import {
   normalizeSku,
   upsertProduct
 } from "@/lib/productStorage";
+import { createProductVisualDataUri } from "@/lib/productVisual";
 import { subscriptionPlans } from "@/lib/subscriptionPlans";
 import { supabase } from "@/lib/supabaseClient";
 import {
@@ -123,6 +124,13 @@ export default function CreateProductPage() {
     }
   }
 
+  function downloadSkuVisual() {
+    const link = document.createElement("a");
+    link.href = createProductVisualDataUri(product);
+    link.download = `${normalizeSku(product.sku || product.productName || "SKU")}-preview.svg`;
+    link.click();
+  }
+
   if (!loaded) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -146,7 +154,7 @@ export default function CreateProductPage() {
     return (
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
         <section className="rounded-lg border border-line bg-white p-8 shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">免费额度已用完 Free quota used</p>
+          <p className="text-sm font-semibold text-slate-500">免费额度已用完</p>
           <h1 className="mt-3 text-4xl font-bold text-ink">当前 SKU 额度已用完。</h1>
           <p className="mt-4 max-w-2xl leading-7 text-slate-600">
             当前账号可创建 {quotaLimit} 个 SKU 资料包，已使用 {quotaUsage} 个。继续创建更多 Product Info Pack，请选择套餐并完成付款确认。
@@ -167,7 +175,7 @@ export default function CreateProductPage() {
           </div>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link href="/checkout?plan=Growth" className="rounded-lg bg-ink px-5 py-3 text-center font-semibold text-white shadow-soft">
-              确认订阅并扫码付款
+              选择套餐并加微信开通
             </Link>
             <Link href="/pricing" className="rounded-lg border border-line bg-white px-5 py-3 text-center font-semibold text-ink">
               查看全部套餐
@@ -182,7 +190,7 @@ export default function CreateProductPage() {
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">创建 / 编辑 Create / Edit</p>
+          <p className="text-sm font-semibold text-slate-500">创建 / 编辑</p>
           <h1 className="mt-2 text-4xl font-bold text-ink">创建产品资料包</h1>
           <p className="mt-3 max-w-2xl leading-7 text-slate-600">
             录入一个 SKU 的基础资料，整理成英文 Listing、包装说明、QR 产品页和可打印 Product Info Pack。
@@ -198,9 +206,9 @@ export default function CreateProductPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <div className="space-y-6">
-          <FormSection title="基础信息 Basic Information">
+          <FormSection title="基础信息">
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label="产品名称 Product Name">
+              <Field label="产品名称">
                 <TextInput value={product.productName} onChange={(event) => updateField("productName", event.currentTarget.value)} placeholder="Gold Plated Pearl Hoop Earrings" />
               </Field>
               <Field label="SKU 编号">
@@ -209,98 +217,98 @@ export default function CreateProductPage() {
               <div className="md:col-span-2">
                 <CategoryPicker value={product.category} onChange={(value) => updateField("category", value)} />
               </div>
-              <Field label="目标市场 Target Market">
+              <Field label="目标市场">
                 <SelectInput value={product.targetMarket} onChange={(event) => updateField("targetMarket", event.currentTarget.value as ProductInput["targetMarket"])}>
                   {targetMarkets.map((market) => (
                     <option key={market}>{market}</option>
                   ))}
                 </SelectInput>
               </Field>
-              <Field label="品牌名称 Brand Name">
+              <Field label="品牌名称">
                 <TextInput value={product.brandName} onChange={(event) => updateField("brandName", event.currentTarget.value)} placeholder="Brand or store name" />
               </Field>
-              <Field label="卖家名称 Seller Name">
+              <Field label="卖家名称">
                 <TextInput value={product.sellerName} onChange={(event) => updateField("sellerName", event.currentTarget.value)} placeholder="Seller legal or store name" />
               </Field>
-              <Field label="原产国 Country of Origin">
+              <Field label="原产国">
                 <TextInput value={product.countryOfOrigin} onChange={(event) => updateField("countryOfOrigin", event.currentTarget.value)} placeholder="China" />
               </Field>
             </div>
           </FormSection>
 
-          <FormSection title="商品细节 Product Details">
+          <FormSection title="商品细节">
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label="材质 Materials">
+              <Field label="材质">
                 <TextArea value={product.materials} onChange={(event) => updateField("materials", event.currentTarget.value)} placeholder="Gold plated copper alloy, imitation pearl..." />
               </Field>
-              <Field label="尺寸 Dimensions">
+              <Field label="尺寸">
                 <TextInput value={product.dimensions} onChange={(event) => updateField("dimensions", event.currentTarget.value)} placeholder="24 mm hoop diameter" />
               </Field>
-              <Field label="重量 Weight">
+              <Field label="重量">
                 <TextInput value={product.weight} onChange={(event) => updateField("weight", event.currentTarget.value)} placeholder="Approx. 8 g per pair" />
               </Field>
-              <Field label="颜色 Colors">
+              <Field label="颜色">
                 <TextInput value={product.colors} onChange={(event) => updateField("colors", event.currentTarget.value)} placeholder="Gold, ivory white" />
               </Field>
-              <Field label="用途 Intended Use">
+              <Field label="用途">
                 <TextArea value={product.intendedUse} onChange={(event) => updateField("intendedUse", event.currentTarget.value)} placeholder="Fashion accessory for daily styling..." />
               </Field>
-              <Field label="目标客户 Target Customer">
+              <Field label="目标客户">
                 <TextArea value={product.targetCustomer} onChange={(event) => updateField("targetCustomer", event.currentTarget.value)} placeholder="Adults looking for lightweight accessories..." />
               </Field>
-              <Field label="核心卖点 Key Selling Points">
+              <Field label="核心卖点">
                 <TextArea value={product.keySellingPoints} onChange={(event) => updateField("keySellingPoints", event.currentTarget.value)} placeholder="Use commas or line breaks for selling points" />
               </Field>
-              <Field label="包装内含物 What is included">
+              <Field label="包装内含物">
                 <TextArea value={product.includedInPackage} onChange={(event) => updateField("includedInPackage", event.currentTarget.value)} placeholder="1 pair of earrings, 1 pouch, 1 care card" />
               </Field>
             </div>
           </FormSection>
 
-          <FormSection title="护理与安全 Care and Safety">
+          <FormSection title="护理与安全">
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label="护理说明 Care Instructions">
+              <Field label="护理说明">
                 <TextArea value={product.careInstructions} onChange={(event) => updateField("careInstructions", event.currentTarget.value)} placeholder="Keep dry. Wipe with a soft cloth..." />
               </Field>
-              <Field label="安全警示 Safety Warnings">
+              <Field label="安全警示">
                 <TextArea value={product.safetyWarnings} onChange={(event) => updateField("safetyWarnings", event.currentTarget.value)} placeholder="Not intended for children. Keep away from small children..." />
               </Field>
-              <Field label="年龄限制 Age Restriction">
+              <Field label="年龄限制">
                 <SelectInput value={product.ageRestriction} onChange={(event) => updateField("ageRestriction", event.currentTarget.value as ProductInput["ageRestriction"])}>
                   {ageRestrictions.map((age) => (
                     <option key={age}>{age}</option>
                   ))}
                 </SelectInput>
               </Field>
-              <ToggleField label="接触皮肤 Skin Contact" value={product.skinContact} onChange={(value) => updateField("skinContact", value)} />
-              <ToggleField label="接触食品 Food Contact" value={product.foodContact} onChange={(value) => updateField("foodContact", value)} />
-              <ToggleField label="含电池 Contains Battery" value={product.containsBattery} onChange={(value) => updateField("containsBattery", value)} />
-              <ToggleField label="含小部件 Contains Small Parts" value={product.containsSmallParts} onChange={(value) => updateField("containsSmallParts", value)} />
-              <Field label="环保 / 可持续声明 Eco Claims">
+              <ToggleField label="接触皮肤" value={product.skinContact} onChange={(value) => updateField("skinContact", value)} />
+              <ToggleField label="接触食品" value={product.foodContact} onChange={(value) => updateField("foodContact", value)} />
+              <ToggleField label="含电池" value={product.containsBattery} onChange={(value) => updateField("containsBattery", value)} />
+              <ToggleField label="含小部件" value={product.containsSmallParts} onChange={(value) => updateField("containsSmallParts", value)} />
+              <Field label="环保 / 可持续声明">
                 <TextArea value={product.ecoClaims} onChange={(event) => updateField("ecoClaims", event.currentTarget.value)} placeholder="Only add claims you can verify with evidence" />
               </Field>
             </div>
           </FormSection>
 
-          <FormSection title="包装 Packaging">
+          <FormSection title="包装">
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label="包装材料 Packaging Material">
+              <Field label="包装材料">
                 <TextInput value={product.packagingMaterial} onChange={(event) => updateField("packagingMaterial", event.currentTarget.value)} placeholder="Kraft paper box, recyclable paper card" />
               </Field>
-              <Field label="回收说明 Recycling Instructions">
+              <Field label="回收说明">
                 <TextArea value={product.recyclingInstructions} onChange={(event) => updateField("recyclingInstructions", event.currentTarget.value)} placeholder="Separate paper packaging where local recycling facilities exist." />
               </Field>
-              <Field label="标签备注 Label Notes">
+              <Field label="标签备注">
                 <TextArea value={product.labelNotes} onChange={(event) => updateField("labelNotes", event.currentTarget.value)} placeholder="Remove before showering or swimming." />
               </Field>
-              <Field label="制造商 / 进口商信息占位 Manufacturer / Importer Info">
+              <Field label="制造商 / 进口商信息">
                 <TextArea value={product.manufacturerImporterInfo} onChange={(event) => updateField("manufacturerImporterInfo", event.currentTarget.value)} placeholder="Add manufacturer or importer info before commercial use." />
               </Field>
             </div>
           </FormSection>
 
-          <FormSection title="图片 Images">
-            <Field label="上传真实产品图 Upload Product Images" hint="可上传 1-4 张本地图片。图片会保存在当前浏览器，用于资料包和公开产品页预览。">
+          <FormSection title="产品图片">
+            <Field label="上传真实产品图" hint="可上传 1-4 张本地图片。图片会保存在当前浏览器，用于资料包和公开产品页预览。">
               <input
                 type="file"
                 accept="image/*"
@@ -309,7 +317,7 @@ export default function CreateProductPage() {
                 className="input"
               />
             </Field>
-            <Field label="产品图片链接 Product Image URLs" hint="每行一个链接。没有真实图片时，系统会根据商品资料自动生成 SKU 预览图。">
+            <Field label="产品图片链接" hint="每行一个链接。没有真实图片时，系统会根据商品资料自动生成 SKU 预览图。">
               <TextArea
                 value={product.imageUrls.join("\n")}
                 onChange={(event) =>
@@ -339,14 +347,24 @@ export default function CreateProductPage() {
         <aside className="space-y-5 lg:sticky lg:top-28 lg:self-start">
           <MissingInfoPanel product={product} />
           <section className="rounded-lg border border-line bg-white p-5 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">图片预览 Image Preview</p>
+            <p className="text-sm font-semibold text-slate-500">图片预览</p>
             <ProductImageStrip images={product.imageUrls} product={product} className="mt-4" />
             <p className="mt-3 text-xs leading-5 text-slate-500">
               没有真实产品图时，这里会自动生成 SKU 预览图；真实产品图请以上传或图片链接为准。
             </p>
+            <button
+              type="button"
+              onClick={downloadSkuVisual}
+              className="mt-4 w-full rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-mist"
+            >
+              下载 SKU 预览图
+            </button>
           </section>
           <section className="rounded-lg border border-line bg-white p-5 shadow-sm">
             <div className="grid gap-3">
+              <p className="rounded-md bg-mist px-3 py-2 text-sm leading-6 text-slate-600">
+                点击保存后，资料会进入控制台；生成页可复制公开链接，也可打印 / 保存 PDF。
+              </p>
               <button
                 type="button"
                 onClick={() => save("pack")}

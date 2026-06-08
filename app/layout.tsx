@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 };
 
 const navItems = [
-  { href: "/", label: "首页 Home" },
-  { href: "/dashboard", label: "控制台 Dashboard" },
-  { href: "/create", label: "创建资料包 Create" },
-  { href: "/pricing", label: "方案 Pricing" },
-  { href: "/contact", label: "咨询 Contact" },
-  { href: "/account", label: "账户 Account" }
+  { href: "/", label: "首页" },
+  { href: "/dashboard", label: "控制台" },
+  { href: "/create", label: "创建资料包" },
+  { href: "/pricing", label: "套餐" },
+  { href: "/contact", label: "咨询" },
+  { href: "/account", label: "账户" }
 ];
 
 export default function RootLayout({

@@ -145,7 +145,7 @@ export default function AdminPage() {
       return;
     }
 
-    setMessage(`已为 ${newCustomerEmail} 开通 ${newCustomerPlan}。客户可用这个邮箱验证码登录。`);
+    setMessage(`已为 ${newCustomerEmail} 开通 ${newCustomerPlan}。客户可用这个邮箱和密码登录。`);
     setNewCustomerEmail("");
     setNewCustomerNote("");
     await loadUsers();
@@ -166,10 +166,10 @@ export default function AdminPage() {
     <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <section className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">管理员 Admin</p>
+          <p className="text-sm font-semibold text-slate-500">管理员</p>
           <h1 className="mt-2 text-4xl font-bold text-ink">用户套餐管理</h1>
           <p className="mt-3 max-w-2xl leading-7 text-slate-600">
-            客户付款后，你可以在这里输入客户邮箱并开通套餐；客户用同一个邮箱验证码登录后，就能看到对应 SKU 额度。
+            客户加微信确认后，你可以在这里输入客户邮箱并开通套餐；客户用同一个邮箱登录后，就能看到对应 SKU 额度。
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -214,7 +214,7 @@ export default function AdminPage() {
             <input
               value={newCustomerNote}
               onChange={(event) => setNewCustomerNote(event.currentTarget.value)}
-              placeholder="例如：支付宝 Growth ¥359"
+              placeholder="例如：微信确认 Growth ¥359"
               className="input mt-2"
             />
           </label>
@@ -286,7 +286,7 @@ export default function AdminPage() {
         {!loading && users.length === 0 && (
           <section className="rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
             <h2 className="text-2xl font-semibold text-ink">暂无登录用户</h2>
-            <p className="mt-3 text-slate-600">客户使用邮箱验证码登录后，会出现在这里。</p>
+            <p className="mt-3 text-slate-600">客户注册或登录后，会出现在这里。</p>
           </section>
         )}
       </section>

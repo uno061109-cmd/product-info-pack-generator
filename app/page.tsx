@@ -9,14 +9,14 @@ const painPoints = [
 ];
 
 const deliverables = [
-  ["英文商品 Listing", "SEO title, bullet points, description, keywords and FAQ"],
-  ["产品信息卡", "Materials, dimensions, origin, use, care and packaging details"],
-  ["包装说明", "Care notes, label notes, recycling notes and package content text"],
-  ["安全提醒", "Small parts, battery, skin contact and other basic warning prompts"],
-  ["QR 产品信息页", "A mobile-friendly product information page for customer transparency"],
-  ["可打印 PDF 资料包", "Printable pack for internal archive, supplier handoff and listing preparation"],
-  ["缺失信息清单", "Missing Information List for fields that should be confirmed"],
-  ["基础风险清单", "Basic Risk Checklist for documentation support"]
+  ["英文商品 Listing", "商品标题、五点描述、详情文案、关键词和常见问题"],
+  ["产品信息卡", "统一整理材质、尺寸、原产国、用途、护理和包装信息"],
+  ["包装说明", "整理护理说明、标签备注、回收说明和包装内含物"],
+  ["安全提醒", "根据小部件、电池、皮肤接触等信息给出基础提醒"],
+  ["QR 产品信息页", "适合手机查看和分享给客户的公开产品信息页"],
+  ["可打印 PDF 资料包", "方便内部归档、供应商交接和上架准备"],
+  ["缺失信息清单", "列出仍需向供应商或团队确认的关键字段"],
+  ["基础风险清单", "辅助卖家进一步检查商品资料和风险信息"]
 ];
 
 const workflow = [
@@ -54,7 +54,7 @@ export default function HomePage() {
               <img src="/images/liucai-pack-logo.svg" alt="留材库 Product Pack logo" className="h-14 w-14 rounded-xl shadow-soft" />
               <div>
                 <p className="text-xl font-bold text-ink">留材库 Product Pack</p>
-                <p className="text-sm text-slate-500">LiucaiKu Product Info Pack</p>
+                <p className="text-sm text-slate-500">跨境商品资料包</p>
               </div>
             </div>
             <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-normal text-ink sm:text-5xl">
@@ -64,8 +64,7 @@ export default function HomePage() {
               适合 Amazon、Etsy、Shopify、TikTok Shop 小卖家。我们帮你把商品资料整理成英文 Listing、产品信息卡、包装说明、QR 产品页和可打印 PDF 资料包。
             </p>
             <p className="mt-3 max-w-2xl leading-7 text-slate-500">
-              Send messy product information. Receive a structured English Product Info Pack ready for listing
-              preparation, customer presentation, packaging notes and internal archive.
+              你用中文提交零散资料，我们整理成交付清晰、方便复用的英文跨境商品资料包。
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -116,7 +115,7 @@ export default function HomePage() {
       <section className="border-y border-line bg-mist">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="mb-8 max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">卖家痛点 Pain Points</p>
+            <p className="text-sm font-semibold text-slate-500">卖家痛点</p>
             <h2 className="mt-2 text-3xl font-bold text-ink">跨境上新缺的不是一段文案，而是一套完整资料。</h2>
           </div>
           <div className="grid gap-4 md:grid-cols-5">
@@ -135,7 +134,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">交付结果 Deliverables</p>
+              <p className="text-sm font-semibold text-slate-500">交付结果</p>
               <h2 className="mt-2 text-3xl font-bold text-ink">我们不是只写一段英文文案，而是交付一整套 SKU Product Info Pack。</h2>
               <p className="mt-4 leading-7 text-slate-600">
                 每个 SKU 会整理成统一结构，方便你用于平台上架、客户展示、包装说明、供应商沟通和内部归档。
@@ -164,7 +163,7 @@ export default function HomePage() {
       <section className="border-y border-line bg-mist">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-8 max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">服务方式 Service</p>
+            <p className="text-sm font-semibold text-slate-500">服务方式</p>
             <h2 className="mt-2 text-3xl font-bold text-ink">先免费体验 3 个 SKU，满意后再批量整理。</h2>
             <p className="mt-4 leading-7 text-slate-600">
               你不需要研究表格模板或英文格式。把商品资料发给我们，我们按 SKU 输出可交付的英文 Product Info Pack。
@@ -193,7 +192,7 @@ export default function HomePage() {
       <section className="bg-mist">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-8 max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">交付流程 Workflow</p>
+            <p className="text-sm font-semibold text-slate-500">交付流程</p>
             <h2 className="mt-2 text-3xl font-bold text-ink">从零散资料，到可复用英文资料包。</h2>
           </div>
           <div className="grid gap-5 lg:grid-cols-3">
@@ -211,7 +210,7 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-slate-500">适用卖家 Use Cases</p>
+            <p className="text-sm font-semibold text-slate-500">适用卖家</p>
             <h2 className="mt-2 text-3xl font-bold text-ink">适合 SKU 多、团队小、需要专业展示的跨境卖家。</h2>
             <p className="mt-4 leading-7 text-slate-600">
               尤其适合饰品、配件、小家居、宠物用品、手机配件、Etsy 手工配件等需要频繁上新的店铺。
