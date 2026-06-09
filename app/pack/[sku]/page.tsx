@@ -61,13 +61,6 @@ export default function PackPage({ params }: { params: { sku: string } }) {
   const printPath = getShareableProductPath(product, "print");
   const missingItems = [...pack.missingInfo.missingFields, ...pack.missingInfo.recommendations];
 
-  function downloadSkuVisual() {
-    const link = document.createElement("a");
-    link.href = createProductVisualDataUri(product);
-    link.download = `${normalizeSku(product.sku || product.productName || "SKU")}-preview.svg`;
-    link.click();
-  }
-
   return (
     <PageShell>
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -90,7 +83,7 @@ export default function PackPage({ params }: { params: { sku: string } }) {
           </Link>
           <button
             type="button"
-            onClick={downloadSkuVisual}
+            onClick={() => downloadSkuVisual(product)}
             className="rounded-lg border border-line bg-white px-4 py-2.5 font-semibold text-ink transition hover:bg-mist"
           >
             下载 SKU 预览图
@@ -230,6 +223,13 @@ export default function PackPage({ params }: { params: { sku: string } }) {
       </div>
     </PageShell>
   );
+}
+
+function downloadSkuVisual(product: ProductInput) {
+  const link = document.createElement("a");
+  link.href = createProductVisualDataUri(product);
+  link.download = `${normalizeSku(product.sku || product.productName || "SKU")}-preview.svg`;
+  link.click();
 }
 
 function PageShell({ children }: { children: ReactNode }) {
